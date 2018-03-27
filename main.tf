@@ -1,7 +1,8 @@
 resource "aws_acm_certificate" "default" {
-  domain_name       = "${var.domain_name}"
-  validation_method = "${var.validation_method}"
-  tags              = "${var.tags}"
+  domain_name               = "${var.domain_name}"
+  validation_method         = "${var.validation_method}"
+  subject_alternative_names = ["*.${var.domain_name}"]
+  tags                      = "${var.tags}"
 }
 
 data "aws_route53_zone" "default" {

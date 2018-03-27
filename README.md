@@ -1,9 +1,11 @@
 # terraform-aws-acm-request-certificate [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate)
 
-Terraform module to request an ACM certificate for a domain name and create a CNAME record in the DNZ zone to complete certificate validation 
+Terraform module to request an ACM certificate for a domain name and all its subdomains, and add CNAME records to the DNZ zone to complete certificate validation 
 
 
 ## Usage
+
+This example will request an SSL certificate for `example.com` and all its subdomains `*.example.com` (Subject Alternative Names)
 
 ```hcl
 module "acm_request_certificate" {
@@ -28,11 +30,11 @@ module "acm_request_certificate" {
 
 ## Outputs
 
-| Name                         | Description                                                                    |
-|:-----------------------------|:-------------------------------------------------------------------------------|
-| `id`                         | The ARN of the certificate                                                     |
-| `arn`                        | The ARN of the certificate                                                     |
-| `domain_validation_options`  | CNAME record that is added to the DNS zone to complete certificate validation  |
+| Name                         | Description                                                                      |
+|:-----------------------------|:---------------------------------------------------------------------------------|
+| `id`                         | The ARN of the certificate                                                       |
+| `arn`                        | The ARN of the certificate                                                       |
+| `domain_validation_options`  | CNAME records that are added to the DNS zone to complete certificate validation  |
 
 
 
