@@ -20,6 +20,7 @@ module "acm_request_certificate" {
 |  Name                               |  Default     |  Description                                                                       | Required |
 |:------------------------------------|:-------------|:-----------------------------------------------------------------------------------|:--------:|
 | `domain_name`                       | ``           | A domain name for which the certificate should be issued                           | Yes      |
+| `validation_method`                 | `DNS`        | Which method to use for validation, `DNS` or `EMAIL`                               | No       |
 | `proces_domain_validation_options`  | `true`       | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation   | No       |
 | `ttl`                               | `300`        | The TTL of the record to add to the DNS zone to complete certificate validation    | No       |
 | `tags`                              | `{}`         | Additional tags  (_e.g._ `map("BusinessUnit","XYZ")`                               | No       |

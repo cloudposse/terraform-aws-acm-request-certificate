@@ -3,6 +3,12 @@ variable "domain_name" {
   description = "A domain name for which the certificate should be issued"
 }
 
+variable "validation_method" {
+  type        = "string"
+  default     = "DNS"
+  description = "Which method to use for validation, DNS or EMAIL"
+}
+
 variable "proces_domain_validation_options" {
   type        = "string"
   default     = "true"
