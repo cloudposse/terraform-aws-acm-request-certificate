@@ -24,7 +24,7 @@ module "acm_request_certificate" {
   domain_name                      = "example.com"
   proces_domain_validation_options = "true"
   ttl                              = "300"
-  subject_alternative_names        = "*.example.com"
+  subject_alternative_names        = ["*.example.com"]
 }
 ```
 
