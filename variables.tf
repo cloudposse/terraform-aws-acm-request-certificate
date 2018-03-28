@@ -26,3 +26,9 @@ variable "tags" {
   default     = {}
   description = "Additional tags (e.g. map('BusinessUnit`,`XYZ`)"
 }
+
+variable "subject_alternative_names" {
+  type        = "list"
+  default     = []
+  description = "A list of domains that should be SANs in the issued certificate"
+}

@@ -1,9 +1,11 @@
 # terraform-aws-acm-request-certificate [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate)
 
-Terraform module to request an ACM certificate for a domain name and create a CNAME record in the DNZ zone to complete certificate validation 
+Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNZ zone to complete certificate validation 
 
 
 ## Usage
+
+This example will request an SSL certificate for `example.com` domain
 
 ```hcl
 module "acm_request_certificate" {
@@ -11,6 +13,18 @@ module "acm_request_certificate" {
   domain_name                      = "example.com"
   proces_domain_validation_options = "true"
   ttl                              = "300"
+}
+```
+
+This example will request an SSL certificate for `example.com` domain and all its subdomains `*.example.com`
+
+```hcl
+module "acm_request_certificate" {
+  source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+  domain_name                      = "example.com"
+  proces_domain_validation_options = "true"
+  ttl                              = "300"
+  subject_alternative_names        = ["*.example.com"]
 }
 ```
 
@@ -24,15 +38,16 @@ module "acm_request_certificate" {
 | `proces_domain_validation_options`  | `true`       | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation   | No       |
 | `ttl`                               | `300`        | The TTL of the record to add to the DNS zone to complete certificate validation    | No       |
 | `tags`                              | `{}`         | Additional tags  (_e.g._ `map("BusinessUnit","XYZ")`                               | No       |
+| `subject_alternative_names`         | `[]`         | A list of domains that should be SANs in the issued certificate                    | No       |
 
 
 ## Outputs
 
-| Name                         | Description                                                                    |
-|:-----------------------------|:-------------------------------------------------------------------------------|
-| `id`                         | The ARN of the certificate                                                     |
-| `arn`                        | The ARN of the certificate                                                     |
-| `domain_validation_options`  | CNAME record that is added to the DNS zone to complete certificate validation  |
+| Name                         | Description                                                                      |
+|:-----------------------------|:---------------------------------------------------------------------------------|
+| `id`                         | The ARN of the certificate                                                       |
+| `arn`                        | The ARN of the certificate                                                       |
+| `domain_validation_options`  | CNAME records that are added to the DNS zone to complete certificate validation  |
 
 
 
