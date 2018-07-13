@@ -38,7 +38,7 @@ related:
 
 # Short description of this project
 description: |-
-  Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNZ zone to complete certificate validation 
+  Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation 
 
 # How to use this project
 usage: |-

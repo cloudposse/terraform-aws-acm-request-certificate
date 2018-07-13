@@ -7,7 +7,7 @@
  [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg)](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 
-Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNZ zone to complete certificate validation 
+Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation 
 
 
 ---
