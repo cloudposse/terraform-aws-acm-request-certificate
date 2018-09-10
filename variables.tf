@@ -9,7 +9,7 @@ variable "validation_method" {
   description = "Which method to use for validation, DNS or EMAIL"
 }
 
-variable "proces_domain_validation_options" {
+variable "process_domain_validation_options" {
   type        = "string"
   default     = "true"
   description = "Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation"
