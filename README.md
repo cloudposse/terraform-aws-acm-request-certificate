@@ -32,10 +32,10 @@ This example will request an SSL certificate for `example.com` domain
 
 ```hcl
 module "acm_request_certificate" {
-  source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
-  domain_name                      = "example.com"
-  proces_domain_validation_options = "true"
-  ttl                              = "300"
+  source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+  domain_name                       = "example.com"
+  process_domain_validation_options = "true"
+  ttl                               = "300"
 }
 ```
 
@@ -43,11 +43,11 @@ This example will request an SSL certificate for `example.com` domain and all it
 
 ```hcl
 module "acm_request_certificate" {
-  source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
-  domain_name                      = "example.com"
-  proces_domain_validation_options = "true"
-  ttl                              = "300"
-  subject_alternative_names        = ["*.example.com"]
+  source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+  domain_name                       = "example.com"
+  process_domain_validation_options = "true"
+  ttl                               = "300"
+  subject_alternative_names         = ["*.example.com"]
 }
 ```
 
@@ -60,30 +60,31 @@ module "acm_request_certificate" {
 ```
 Available targets:
 
-  help                                This help screen
+  help                                Help screen
   help/all                            Display help for all targets
+  help/short                          This help short screen
   lint                                Lint terraform code
 
 ```
 
 ## Inputs
 
-| Name | Description | Type | Default | Required |
-|------|-------------|:----:|:-----:|:-----:|
-| domain_name | A domain name for which the certificate should be issued | string | - | yes |
-| proces_domain_validation_options | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation | string | `true` | no |
-| subject_alternative_names | A list of domains that should be SANs in the issued certificate | list | `<list>` | no |
-| tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>` | no |
-| ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
-| validation_method | Which method to use for validation, DNS or EMAIL | string | `DNS` | no |
+| Name                              | Description                                                                                               | Type   | Default  | Required |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------- | :----: | :------: | :------: |
+| domain_name                       | A domain name for which the certificate should be issued                                                  | string | -        | yes      |
+| process_domain_validation_options | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation | string | `true`   | no       |
+| subject_alternative_names         | A list of domains that should be SANs in the issued certificate                                           | list   | `<list>` | no       |
+| tags                              | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>`                                           | no     |
+| ttl                               | The TTL of the record to add to the DNS zone to complete certificate validation                           | string | `300`    | no       |
+| validation_method                 | Which method to use for validation, DNS or EMAIL                                                          | string | `DNS`    | no       |
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| arn | The ARN of the certificate |
+| Name                      | Description                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------- |
+| arn                       | The ARN of the certificate                                                      |
 | domain_validation_options | CNAME records that are added to the DNS zone to complete certificate validation |
-| id | The ARN of the certificate |
+| id                        | The ARN of the certificate                                                      |
 
 
 
@@ -212,8 +213,8 @@ Check out [our other projects][github], [apply for a job][jobs], or [hire us][hi
 
 ### Contributors
 
-|  [![Andriy Knysh][aknysh_avatar]][aknysh_homepage]<br/>[Andriy Knysh][aknysh_homepage] | [![Vladimir][SweetOps_avatar]][SweetOps_homepage]<br/>[Vladimir][SweetOps_homepage] |
-|---|---|
+| [![Andriy Knysh][aknysh_avatar]][aknysh_homepage]<br/>[Andriy Knysh][aknysh_homepage] | [![Vladimir][SweetOps_avatar]][SweetOps_homepage]<br/>[Vladimir][SweetOps_homepage] |
+| ------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
 
   [aknysh_homepage]: https://github.com/aknysh
   [aknysh_avatar]: https://github.com/aknysh.png?size=150
