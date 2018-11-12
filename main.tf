@@ -1,7 +1,12 @@
+locals {
+  # Remove the var.domain_name from the subject_alternative_names as it doesn't need to be there.
+  subject_alternative_names = ["${concat( slice(var.subject_alternative_names, 0, index(var.subject_alternative_names, var.domain_name)), slice(var.subject_alternative_names, index(var.subject_alternative_names, var.domain_name) + 1 , length(var.subject_alternative_names) ))}"]
+}
+
 resource "aws_acm_certificate" "default" {
   domain_name               = "${var.domain_name}"
   validation_method         = "${var.validation_method}"
-  subject_alternative_names = ["${var.subject_alternative_names}"]
+  subject_alternative_names = ["${local.subject_alternative_names}"]
   tags                      = "${var.tags}"
 
   lifecycle {
@@ -15,29 +20,20 @@ data "aws_route53_zone" "default" {
   private_zone = false
 }
 
-locals {
-  domain_validation_options = "${aws_acm_certificate.default.domain_validation_options[0]}"
-}
-
-resource "null_resource" "default" {
-  count = "${var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0}"
-
-  triggers = "${aws_acm_certificate.default.domain_validation_options[count.index]}"
-}
-
 resource "aws_acm_certificate_validation" "default" {
+  count           = "${var.process_domain_validation_options == "true" ? 1 : 0}"
   certificate_arn = "${aws_acm_certificate.default.arn}"
 
   validation_record_fqdns = [
-    "${distinct(compact(concat(aws_route53_record.default.fqdn, var.subject_alternative_names)))}",
+    "${distinct(compact(aws_route53_record.default.*.fqdn))}",
   ]
 }
 
 resource "aws_route53_record" "default" {
-  count   = "${length(null_resource.default.triggers)}"
+  count   = "${var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? length(local.subject_alternative_names)  + 1 : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${lookup("null_resource.default.${count.index}","resource_record_name")}"
-  type    = "${lookup("null_resource.default.${count.index}", "resource_record_type")}"
+  name    = "${lookup(aws_acm_certificate.default.domain_validation_options[count.index],"resource_record_name")}"
+  type    = "${lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_type")}"
   ttl     = "${var.ttl}"
-  records = ["${lookup("null_resource.default.${count.index}","resource_record_value")}"]
+  records = ["${lookup(aws_acm_certificate.default.domain_validation_options[count.index],"resource_record_value")}"]
 }
