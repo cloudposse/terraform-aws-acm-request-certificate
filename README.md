@@ -82,7 +82,6 @@ Available targets:
   lint                                Lint terraform code
 
 ```
-
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -93,6 +92,7 @@ Available targets:
 | tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>` | no |
 | ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
 | validation_method | Which method to use for validation, DNS or EMAIL | string | `DNS` | no |
+| zone_name | The name of the desired Route53 Hosted Zone | string | `` | no |
 
 ## Outputs
 
@@ -183,7 +183,7 @@ In general, PRs are welcome. We follow the typical "fork-and-pull" Git workflow.
 
 ## Copyright
 
-Copyright © 2017-2018 [Cloud Posse, LLC](https://cpco.io/copyright)
+Copyright © 2017-2019 [Cloud Posse, LLC](https://cpco.io/copyright)
 
 
 

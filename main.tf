@@ -11,12 +11,13 @@ resource "aws_acm_certificate" "default" {
 
 data "aws_route53_zone" "default" {
   count        = "${var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? 1 : 0}"
-  name         = "${var.domain_name}."
+  name         = "${local.zone_name}."
   private_zone = false
 }
 
 locals {
   domain_validation_options = "${aws_acm_certificate.default.domain_validation_options[0]}"
+  zone_name                 = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
 }
 
 resource "null_resource" "default" {
