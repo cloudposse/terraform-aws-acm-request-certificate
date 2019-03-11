@@ -1,6 +1,6 @@
 locals {
   zone_name                 = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
-  dns_validation_enabled    = "${var.enabled == "true" && var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? true : false}"
+  dns_validation_enabled    = "${var.enabled == "true" && var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? "true" : "false"}"
 }
 
 resource "aws_acm_certificate" "default" {
@@ -16,7 +16,7 @@ resource "aws_acm_certificate" "default" {
 }
 
 data "aws_route53_zone" "default" {
-  count        = "${local.dns_validation_enabled ? 1 : 0}"
+  count        = "${local.dns_validation_enabled == "true" ? 1 : 0}"
   name         = "${local.zone_name}"
   private_zone = false
 }
