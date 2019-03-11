@@ -1,4 +1,5 @@
 resource "aws_acm_certificate" "default" {
+  count                     = "${var.enabled == "true" ? 1 : 0}"
   domain_name               = "${var.domain_name}"
   validation_method         = "${var.validation_method}"
   subject_alternative_names = ["${var.subject_alternative_names}"]
@@ -21,12 +22,13 @@ locals {
 }
 
 resource "null_resource" "default" {
-  count = "${var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0}"
+  count = "${var.enabled == "true" && var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0}"
 
   triggers = "${aws_acm_certificate.default.domain_validation_options[count.index]}"
 }
 
 resource "aws_acm_certificate_validation" "default" {
+  count           = "${var.enabled == "true" ? 1 : 0}"
   certificate_arn = "${aws_acm_certificate.default.arn}"
 
   validation_record_fqdns = [
