@@ -17,7 +17,7 @@ resource "aws_acm_certificate" "default" {
 
 data "aws_route53_zone" "default" {
   count        = "${local.dns_validation_enabled ? 1 : 0}"
-  name         = "${local.zone_name}."
+  name         = "${local.zone_name}"
   private_zone = false
 }
 
