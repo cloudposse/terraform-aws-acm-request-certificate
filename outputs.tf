@@ -1,10 +1,10 @@
 output "id" {
-  value       = "${aws_acm_certificate.default.id}"
+  value       = "${join("",aws_acm_certificate.default.*.id)}"
   description = "The ARN of the certificate"
 }
 
 output "arn" {
-  value       = "${join("", aws_acm_certificate_validation.default.*.certificate_arn)}"
+  value       = "${join("",aws_acm_certificate_validation.default.*.certificate_arn)}"
   description = "The ARN of the certificate"
 }
 

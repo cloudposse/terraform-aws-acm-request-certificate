@@ -1,3 +1,8 @@
+variable "enabled" {
+  description = "Set to false to prevent the module from creating any resources"
+  default     = "true"
+}
+
 variable "domain_name" {
   type        = "string"
   description = "A domain name for which the certificate should be issued"
@@ -31,4 +36,10 @@ variable "subject_alternative_names" {
   type        = "list"
   default     = []
   description = "A list of domains that should be SANs in the issued certificate"
+}
+
+variable "zone_name" {
+  type        = "string"
+  default     = ""
+  description = "The name of the desired Route53 Hosted Zone"
 }
