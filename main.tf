@@ -2,6 +2,8 @@ locals {
   # Remove the var.domain_name from the subject_alternative_names as it doesn't need to be there.
   sans                      = ["${sort(distinct(compact(var.subject_alternative_names)))}"]
   subject_alternative_names = ["${concat( slice(local.sans, 0, index(local.sans, var.domain_name)), slice(local.sans, index(local.sans, var.domain_name) + 1 , length(local.sans) ))}"]
+  zone_name                 = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
+
 }
 
 resource "aws_acm_certificate" "default" {
