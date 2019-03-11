@@ -1,7 +1,10 @@
 locals {
   # Remove the var.domain_name from the subject_alternative_names as it doesn't need to be there.
   sans                      = ["${sort(distinct(compact(var.subject_alternative_names)))}"]
-  subject_alternative_names = ["${concat( slice(local.sans, 0, index(local.sans, var.domain_name)), slice(local.sans, index(local.sans, var.domain_name) + 1 , length(local.sans) ))}"]
+  domain_name_index_in_sans = "${contains(local.sans, var.domain_name) ? index(local.sans, var.domain_name) : -1 }"
+  sans_left                 = ["${local.domain_name_index_in_sans > -1 ? slice(local.sans, 0, local.domain_name_index_in_sans) : local.sans }"]
+  sans_right                = ["${local.domain_name_index_in_sans > -1 ? slice(local.sans, local.domain_name_index_in_sans + 1 , length(local.sans) ) : list() }"]
+  subject_alternative_names = ["${concat(sans_left, sans_right)}"]
   zone_name                 = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
 
 }
