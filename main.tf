@@ -1,6 +1,8 @@
 locals {
-  zone_name                 = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
-  dns_validation_enabled    = "${var.enabled == "true" && var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? "true" : "false"}"
+  zone_name                = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
+  validation_enabled       = "${var.enabled == "true" && var.process_domain_validation_options == "true" ? true : false}"
+  dns_validation_enabled   = "${local.validation_enabled && var.validation_method == "DNS" ? true : false}"
+  email_validation_enabled = "${local.validation_enabled && var.validation_method == "EMAIL" ? true : false}"
 }
 
 resource "aws_acm_certificate" "default" {
@@ -16,7 +18,7 @@ resource "aws_acm_certificate" "default" {
 }
 
 data "aws_route53_zone" "default" {
-  count        = "${local.dns_validation_enabled == "true" ? 1 : 0}"
+  count        = "${local.dns_validation_enabled ? 1 : 0}"
   name         = "${local.zone_name}"
   private_zone = false
 }
@@ -30,8 +32,13 @@ resource "aws_route53_record" "default" {
   ttl     = "${var.ttl}"
 }
 
-resource "aws_acm_certificate_validation" "default" {
-  count           = "${var.enabled == "true" && var.process_domain_validation_options == "true" ? 1 : 0}"
+resource "aws_acm_certificate_validation" "email" {
+  count           = "${local.email_validation_enabled ? 1 : 0}"
+  certificate_arn = "${aws_acm_certificate.default.arn}"
+}
+
+resource "aws_acm_certificate_validation" "dns" {
+  count           = "${local.dns_validation_enabled ? 1 : 0}"
   certificate_arn = "${aws_acm_certificate.default.arn}"
 
   validation_record_fqdns = [

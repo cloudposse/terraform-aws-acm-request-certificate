@@ -4,7 +4,7 @@ output "id" {
 }
 
 output "arn" {
-  value       = "${join("",aws_acm_certificate_validation.default.*.certificate_arn)}"
+  value       = "${join("",compact(concat(aws_acm_certificate_validation.dns.*.certificate_arn, aws_acm_certificate_validation.email.*.certificate_arn)))}"
   description = "The ARN of the certificate"
 }
 
