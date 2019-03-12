@@ -32,11 +32,6 @@ resource "aws_route53_record" "default" {
   ttl     = "${var.ttl}"
 }
 
-resource "aws_acm_certificate_validation" "email" {
-  count           = "${local.email_validation_enabled ? 1 : 0}"
-  certificate_arn = "${aws_acm_certificate.default.arn}"
-}
-
 resource "aws_acm_certificate_validation" "dns" {
   count           = "${local.dns_validation_enabled ? 1 : 0}"
   certificate_arn = "${aws_acm_certificate.default.arn}"
