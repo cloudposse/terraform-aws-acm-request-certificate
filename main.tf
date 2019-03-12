@@ -25,9 +25,9 @@ data "aws_route53_zone" "default" {
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(var.subject_alternative_names) + 1 : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_name")}"
-  type    = "${lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_type")}"
-  records = ["${lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_value")}"]
+  name    = "${lookup(element(aws_acm_certificate.default.domain_validation_options, count.index), "resource_record_name")}"
+  type    = "${lookup(element(aws_acm_certificate.default.domain_validation_options, count.index), "resource_record_type")}"
+  records = ["${lookup(element(aws_acm_certificate.default.domain_validation_options, count.index), "resource_record_value")}"]
   ttl     = "${var.ttl}"
 }
 
