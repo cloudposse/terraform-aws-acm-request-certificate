@@ -28,7 +28,7 @@ resource "aws_route53_record" "default" {
   zone_id = "${data.aws_route53_zone.default.zone_id}"
   name    = "${lookup(length(local.dns_validation_records) != 0 ? element(local.dns_validation_records, count.index) : map(), "resource_record_name", "")}"
   type    = "${lookup(length(local.dns_validation_records) != 0 ? element(local.dns_validation_records, count.index) : map(), "resource_record_type", "")}"
-  records = ["${lookup(length(local.dns_validation_records) != 0 ? element(local.dns_validation_records, count.index) : map(), "resource_record_value", list())}"]
+  records = ["${lookup(length(local.dns_validation_records) != 0 ? element(local.dns_validation_records, count.index) : map(), "resource_record_value", "")}"]
   ttl     = "${var.ttl}"
 }
 
