@@ -2,6 +2,7 @@ locals {
   zone_name                = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
   validation_enabled       = "${var.enabled == "true" && var.process_domain_validation_options == "true" ? true : false}"
   dns_validation_enabled   = "${local.validation_enabled && var.validation_method == "DNS" ? true : false}"
+  dns_validation_records   = ["${aws_acm_certificate.default.domain_validation_options}"]
 }
 
 resource "aws_acm_certificate" "default" {
@@ -25,9 +26,9 @@ data "aws_route53_zone" "default" {
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(var.subject_alternative_names) + 1 : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(aws_acm_certificate.default.domain_validation_options.*.resource_record_name, count.index)}"
-  type    = "${element(aws_acm_certificate.default.domain_validation_options.*.resource_record_type, count.index)}"
-  records = ["${element(aws_acm_certificate.default.domain_validation_options.*.resource_record_value, count.index)}"]
+  name    = "${lookup(element(local.dns_validation_records, count.index), "resource_record_name", "")}"
+  type    = "${lookup(element(local.dns_validation_records, count.index), "resource_record_type", "")}"
+  records = ["${lookup(element(local.dns_validation_records, count.index), "resource_record_value", list())}"]
   ttl     = "${var.ttl}"
 }
 
