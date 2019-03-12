@@ -2,7 +2,6 @@ locals {
   zone_name                = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
   validation_enabled       = "${var.enabled == "true" && var.process_domain_validation_options == "true" ? true : false}"
   dns_validation_enabled   = "${local.validation_enabled && var.validation_method == "DNS" ? true : false}"
-  email_validation_enabled = "${local.validation_enabled && var.validation_method == "EMAIL" ? true : false}"
 }
 
 resource "aws_acm_certificate" "default" {
