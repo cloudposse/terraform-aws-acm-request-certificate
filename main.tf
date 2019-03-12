@@ -35,6 +35,6 @@ resource "aws_acm_certificate_validation" "default" {
   certificate_arn = "${aws_acm_certificate.default.arn}"
 
   validation_record_fqdns = [
-    "${distinct(compact(aws_acm_certificate.default.domain_validation_options.*.domain_name))}",
+    "${distinct(concat(list(var.domain_name), var.subject_alternative_names))}",
   ]
 }
