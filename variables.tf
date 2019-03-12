@@ -10,7 +10,8 @@ variable "domain_name" {
 
 variable "validation_method" {
   type        = "string"
-  default     = "DNS"
+  #default     = "DNS"
+  default     = "EMAIL"
   description = "Which method to use for validation, DNS or EMAIL"
 }
 
