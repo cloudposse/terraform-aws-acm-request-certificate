@@ -2,7 +2,7 @@ locals {
   zone_name                = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
   validation_enabled       = "${var.enabled == "true" && var.process_domain_validation_options == "true" ? true : false}"
   dns_validation_enabled   = "${local.validation_enabled == "true" && var.validation_method == "DNS" ? true : false}"
-  dns_validation_records   = ["${flatten(aws_acm_certificate.default.*.domain_validation_options)}"]
+  dns_validation_records   = ["${flatten(distinct(aws_acm_certificate.default.*.domain_validation_options))}"]
 }
 
 resource "aws_acm_certificate" "default" {
