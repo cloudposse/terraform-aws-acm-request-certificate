@@ -32,6 +32,8 @@ resource "null_resource" "dns_records" {
     type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
     value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
   }
+  
+  depends_on = ["aws_acm_certificate.default"]
 }
 
 resource "aws_route53_record" "default" {
