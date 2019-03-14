@@ -32,16 +32,16 @@ resource "null_resource" "dns_records" {
     type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
     value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
   }
-  
+
   depends_on = ["aws_acm_certificate.default"]
 }
 
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(distinct(null_resource.dns_records.*.triggers.name), count.index)}"
-  type    = "${element(distinct(null_resource.dns_records.*.triggers.type), count.index)}"
-  records = ["${element(distinct(null_resource.dns_records.*.triggers.value), count.index)}"]
+  name    = "${element(distinct(aws_acm_certificate.default.0.domain_validation_options.*.resource_record_name), count.index)}"
+  type    = "${element(distinct(aws_acm_certificate.default.0.domain_validation_options.*.resource_record_type), count.index)}"
+  records = ["${element(distinct(aws_acm_certificate.default.0.domain_validation_options.*.resource_record_value), count.index)}"]
   ttl     = "${var.ttl}"
 }
 
