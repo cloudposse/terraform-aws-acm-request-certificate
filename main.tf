@@ -2,7 +2,9 @@ locals {
   zone_name                = "${var.zone_name == "" ? var.domain_name : var.zone_name}"
   validation_enabled       = "${var.enabled == "true" && var.process_domain_validation_options == "true" ? true : false}"
   dns_validation_enabled   = "${local.validation_enabled == "true" && var.validation_method == "DNS" ? true : false}"
-  dns_validation_records   = ["${distinct(flatten(aws_acm_certificate.default.*.domain_validation_options))}"]
+  dns_validation_records   = ["${flatten(aws_acm_certificate.default.*.domain_validation_options)}"]
+  domains                  = ["${concat(list(var.domain_name), var.subject_alternative_names)}"]
+  unique_domains           = ["${distinct(compact(split(" ",replace(join(" ", local.domains), "*.", ""))))}"]
 }
 
 resource "aws_acm_certificate" "default" {
@@ -23,12 +25,21 @@ data "aws_route53_zone" "default" {
   private_zone = false
 }
 
-resource "aws_route53_record" "default" {
+data "null_data_source" "dns_records" {
   count   = "${local.dns_validation_enabled ? length(var.subject_alternative_names) + 1 : 0 }"
+  inputs = {
+    name  = "${lookup(local.dns_validation_records[count.index], "resource_record_name", "")}"
+    type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
+    value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
+  }
+}
+
+resource "aws_route53_record" "default" {
+  count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${lookup(local.dns_validation_records[count.index], "resource_record_name", "")}"
-  type    = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
-  records = ["${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"]
+  name    = "${element(distinct(data.null_data_source.dns_records.*.outputs.name), count.index)}"
+  type    = "${element(distinct(data.null_data_source.dns_records.*.outputs.type), count.index)}"
+  records = ["${element(distinct(data.null_data_source.dns_records.*.outputs.value), count.index)}"]
   ttl     = "${var.ttl}"
 }
 
