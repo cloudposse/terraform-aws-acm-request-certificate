@@ -33,6 +33,10 @@ resource "null_resource" "dns_records" {
     value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
   }
 
+  lifecycle {
+    create_before_destroy = true
+  }
+
   depends_on = ["aws_acm_certificate.default"]
 }
 
