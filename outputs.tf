@@ -14,6 +14,6 @@ output "domain_validation_options" {
 }
 
 output "email_validation_options" {
-  value       = ["${aws_acm_certificate.default.*.validation_emails}"]
+  value       = ["${flatten(aws_acm_certificate.default.*.validation_emails)}"]
   description = " A list of addresses that received a validation E-Mail"
 }
