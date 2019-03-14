@@ -25,9 +25,9 @@ data "aws_route53_zone" "default" {
   private_zone = false
 }
 
-data "null_data_source" "dns_records" {
+resource "null_data_source" "dns_records" {
   count   = "${local.dns_validation_enabled ? length(var.subject_alternative_names) + 1 : 0 }"
-  inputs = {
+  triggers = {
     name  = "${lookup(local.dns_validation_records[count.index], "resource_record_name", "")}"
     type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
     value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
@@ -37,9 +37,9 @@ data "null_data_source" "dns_records" {
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(distinct(data.null_data_source.dns_records.*.outputs.name), count.index)}"
-  type    = "${element(distinct(data.null_data_source.dns_records.*.outputs.type), count.index)}"
-  records = ["${element(distinct(data.null_data_source.dns_records.*.outputs.value), count.index)}"]
+  name    = "${element(distinct(null_data_source.dns_records.*.triggers.name), count.index)}"
+  type    = "${element(distinct(null_data_source.dns_records.*.triggers.type), count.index)}"
+  records = ["${element(distinct(null_data_source.dns_records.*.triggers.value), count.index)}"]
   ttl     = "${var.ttl}"
 }
 
