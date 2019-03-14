@@ -37,9 +37,9 @@ resource "null_resource" "dns_records" {
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(distinct(null_resource.dns_records.*.triggers.name), count.index)}"
-  type    = "${element(distinct(null_resource.dns_records.*.triggers.type), count.index)}"
-  records = ["${element(distinct(null_resource.dns_records.*.triggers.value), count.index)}"]
+  name    = "${element(distinct(null_resource.dns_records.*.triggers["name"]), count.index)}"
+  type    = "${element(distinct(null_resource.dns_records.*.triggers["type"]), count.index)}"
+  records = ["${element(distinct(null_resource.dns_records.*.triggers["value"]), count.index)}"]
   ttl     = "${var.ttl}"
 }
 
