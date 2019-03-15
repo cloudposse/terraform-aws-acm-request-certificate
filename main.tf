@@ -5,8 +5,6 @@ locals {
   dns_validation_records   = ["${flatten(aws_acm_certificate.default.*.domain_validation_options)}"]
   domains                  = ["${concat(list(var.domain_name), var.subject_alternative_names)}"]
   unique_domains           = ["${distinct(compact(split(" ",replace(join(" ", local.domains), "*.", ""))))}"]
-
-  test  = ["${distinct(null_resource.dns_records.*.triggers.record)}"]
 }
 
 resource "aws_acm_certificate" "default" {
@@ -28,14 +26,14 @@ resource "null_resource" "dns_records" {
   triggers {
     record  = "${format("%s:%s:%s", lookup(local.dns_validation_records[count.index], "resource_record_name", ""), lookup(local.dns_validation_records[count.index], "resource_record_type", ""), lookup(local.dns_validation_records[count.index], "resource_record_value", ""))}"
   }
-  }
+}
 
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(split(":", element(local.test, count.index)), 0)}"
-  type    = "${element(split(":", element(local.test, count.index)), 1)}"
-  records = ["${element(split(":", element(local.test, count.index)), 2)}"]
+  name    = "${element(split(":", element(distinct(null_resource.dns_records.*.triggers.record), count.index)), 0)}"
+  type    = "${element(split(":", element(distinct(null_resource.dns_records.*.triggers.record), count.index)), 1)}"
+  records = ["${element(split(":", element(distinct(null_resource.dns_records.*.triggers.record), count.index)), 2)}"]
   ttl     = "${var.ttl}"
 
   depends_on = ["null_resource.dns_records"]
