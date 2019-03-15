@@ -56,6 +56,6 @@ resource "aws_acm_certificate_validation" "dns" {
   certificate_arn = "${aws_acm_certificate.default.arn}"
 
   validation_record_fqdns = [
-    "${distinct(concat(list(var.domain_name), var.subject_alternative_names))}",
+    "${aws_route53_record.default.*.fqdn}",
   ]
 }
