@@ -5,6 +5,9 @@ locals {
   dns_validation_records   = ["${flatten(aws_acm_certificate.default.*.domain_validation_options)}"]
   domains                  = ["${concat(list(var.domain_name), var.subject_alternative_names)}"]
   unique_domains           = ["${distinct(compact(split(" ",replace(join(" ", local.domains), "*.", ""))))}"]
+
+
+  
 }
 
 resource "aws_acm_certificate" "default" {
