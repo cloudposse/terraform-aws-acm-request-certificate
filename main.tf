@@ -50,7 +50,7 @@ resource "null_resource" "test" {
     create_before_destroy = true
   }
 
-  depends_on = ["aws_acm_certificate.default"]
+  depends_on = ["null_resource.dns_records"]
 }
 
 resource "aws_route53_record" "default" {
@@ -61,7 +61,7 @@ resource "aws_route53_record" "default" {
   records = ["${element(split(":", element(null_resource.test.0.triggers.data, count.index)), 2)}"]
   ttl     = "${var.ttl}"
 
-  depends_on = ["null_resource.dns_records"]
+  depends_on = ["null_resource.test"]
 }
 
 resource "aws_acm_certificate_validation" "dns" {
