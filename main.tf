@@ -6,8 +6,7 @@ locals {
   domains                  = ["${concat(list(var.domain_name), var.subject_alternative_names)}"]
   unique_domains           = ["${distinct(compact(split(" ",replace(join(" ", local.domains), "*.", ""))))}"]
 
-  dns_validation_name      = ["${aws_acm_certificate.default.0.domain_validation_options.*.resource_record_name}"]
-  dns_validation_value     = ["${aws_acm_certificate.default.0.domain_validation_options.*.resource_record_value}"]
+  test  = ["${distinct(null_resource.dns_records.*.triggers.record)}"]
 }
 
 resource "aws_acm_certificate" "default" {
@@ -31,9 +30,7 @@ data "aws_route53_zone" "default" {
 resource "null_resource" "dns_records" {
   count   = "${local.dns_validation_enabled ? length(local.domains) : 0 }"
   triggers {
-    name  = "${lookup(local.dns_validation_records[count.index], "resource_record_name", "")}"
-    type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
-    value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
+    record  = "${format("%s:%s:%s", lookup(local.dns_validation_records[count.index], "resource_record_name", ""), lookup(local.dns_validation_records[count.index], "resource_record_type", ""), lookup(local.dns_validation_records[count.index], "resource_record_value", ""))}"
   }
 
   lifecycle {
@@ -44,11 +41,11 @@ resource "null_resource" "dns_records" {
 }
 
 resource "aws_route53_record" "default" {
-  count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
+  count   = "${local.dns_validation_enabled ? length(local.test) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(distinct(local.dns_validation_name), count.index)}"
-  type    = "CNAME"
-  records = ["${element(distinct(local.dns_validation_value), count.index)}"]
+  name    = "${element(split(":", element(local.test, count.index), 0))}"
+  type    = "${element(split(":", element(local.test, count.index), 1))}"
+  records = ["${element(split(":", element(local.test, count.index), 2))}"]
   ttl     = "${var.ttl}"
 
   depends_on = ["null_resource.dns_records"]
