@@ -7,7 +7,7 @@ locals {
   unique_domains           = ["${distinct(compact(split(" ",replace(join(" ", local.domains), "*.", ""))))}"]
 
 
-  
+  validation_domains      = ["${distinct(flatten(aws_acm_certificate.default..domain_validation_options))}"]
 }
 
 resource "aws_acm_certificate" "default" {
@@ -31,9 +31,9 @@ data "aws_route53_zone" "default" {
 resource "null_resource" "dns_records" {
   count   = "${local.dns_validation_enabled ? length(var.subject_alternative_names) + 1 : 0 }"
   triggers {
-    name  = "${lookup(local.dns_validation_records[count.index], "resource_record_name", "")}"
-    type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
-    value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
+    name  = "${lookup("aws_acm_certificate.default.0.domain_validation_options.${count.index}", "resource_record_name", "")}"
+    type  = "${lookup("aws_acm_certificate.default.0.domain_validation_options.${count.index}", "resource_record_type", "")}"
+    value = "${lookup("aws_acm_certificate.default.0.domain_validation_options.${count.index}", "resource_record_value", "")}"
   }
 
   lifecycle {
