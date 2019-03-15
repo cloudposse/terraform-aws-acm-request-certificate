@@ -6,8 +6,8 @@ locals {
   domains                  = ["${concat(list(var.domain_name), var.subject_alternative_names)}"]
   unique_domains           = ["${distinct(compact(split(" ",replace(join(" ", local.domains), "*.", ""))))}"]
 
-
-  validation_domains      = ["${distinct(flatten(aws_acm_certificate.default..domain_validation_options))}"]
+  dns_validation_name      = ["${aws_acm_certificate.default.0.domain_validation_options.*.resource_record_name}"]
+  dns_validation_value     = ["${aws_acm_certificate.default.0.domain_validation_options.*.resource_record_value}"]
 }
 
 resource "aws_acm_certificate" "default" {
@@ -29,11 +29,11 @@ data "aws_route53_zone" "default" {
 }
 
 resource "null_resource" "dns_records" {
-  count   = "${local.dns_validation_enabled ? length(var.subject_alternative_names) + 1 : 0 }"
+  count   = "${local.dns_validation_enabled ? length(local.domains) : 0 }"
   triggers {
-    name  = "${lookup("aws_acm_certificate.default.0.domain_validation_options.${count.index}", "resource_record_name", "")}"
-    type  = "${lookup("aws_acm_certificate.default.0.domain_validation_options.${count.index}", "resource_record_type", "")}"
-    value = "${lookup("aws_acm_certificate.default.0.domain_validation_options.${count.index}", "resource_record_value", "")}"
+    name  = "${lookup(local.dns_validation_records[count.index], "resource_record_name", "")}"
+    type  = "${lookup(local.dns_validation_records[count.index], "resource_record_type", "")}"
+    value = "${lookup(local.dns_validation_records[count.index], "resource_record_value", "")}"
   }
 
   lifecycle {
@@ -46,9 +46,9 @@ resource "null_resource" "dns_records" {
 resource "aws_route53_record" "default" {
   count   = "${local.dns_validation_enabled ? length(local.unique_domains) : 0 }"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${element(distinct(null_resource.dns_records.*.triggers.name), count.index)}"
-  type    = "${element(distinct(null_resource.dns_records.*.triggers.type), count.index)}"
-  records = ["${element(distinct(null_resource.dns_records.*.triggers.value), count.index)}"]
+  name    = "${element(distinct(local.dns_validation_name), count.index)}"
+  type    = "CNAME"
+  records = ["${element(distinct(local.dns_validation_value), count.index)}"]
   ttl     = "${var.ttl}"
 
   depends_on = ["null_resource.dns_records"]
