@@ -40,7 +40,7 @@ data "aws_route53_zone" "default" {
 //}
 
 resource "null_resource" "default" {
-  count = "${var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0}"
+  count = "${local.dns_validation_enabled ? length(local.domains) : 0 }"
 
   triggers = "${aws_acm_certificate.default.domain_validation_options[count.index]}"
 }
