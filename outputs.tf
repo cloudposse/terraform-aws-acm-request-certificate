@@ -9,7 +9,8 @@ output "arn" {
 }
 
 output "domain_validation_options" {
-  value       = ["${aws_acm_certificate.default.*.domain_validation_options}"]
+  # value       = ["${aws_acm_certificate.default.*.domain_validation_options}"]
+  value = ["${data.null_data_source.dns_records.*.outputs["record"]}"]
   description = "CNAME records that are added to the DNS zone to complete certificate validation"
 }
 
