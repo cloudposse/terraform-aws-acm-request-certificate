@@ -28,25 +28,7 @@ resource "null_resource" "default" {
 
 resource "aws_acm_certificate_validation" "default" {
   certificate_arn = aws_acm_certificate.default.arn
-
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
-  validation_record_fqdns = [
-    distinct(
-      compact(
-        concat(
-          aws_route53_record.default[0].fqdn,
-          var.subject_alternative_names,
-        ),
-      ),
-    ),
-  ]
+  validation_record_fqdns = distinct(compact(concat(aws_route53_record.default[0].fqdn, var.subject_alternative_names)))
 }
 
 resource "aws_route53_record" "default" {
@@ -55,14 +37,6 @@ resource "aws_route53_record" "default" {
   name    = "null_resource.default.${count.index}" ["resource_record_name"]
   type    = "null_resource.default.${count.index}" ["resource_record_type"]
   ttl     = var.ttl
-  # TF-UPGRADE-TODO: In Terraform v0.10 and earlier, it was sometimes necessary to
-  # force an interpolation expression to be interpreted as a list by wrapping it
-  # in an extra set of list brackets. That form was supported for compatibilty in
-  # v0.11, but is no longer supported in Terraform v0.12.
-  #
-  # If the expression in the following list itself returns a list, remove the
-  # brackets to avoid interpretation as a list of lists. If the expression
-  # returns a single list item then leave it as-is and remove this TODO comment.
   records = ["null_resource.default.${count.index}" ["resource_record_value"]]
 }
 
