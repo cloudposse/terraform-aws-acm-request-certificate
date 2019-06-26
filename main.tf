@@ -21,8 +21,7 @@ locals {
 }
 
 resource "null_resource" "default" {
-  count = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0
-
+  count    = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0
   triggers = aws_acm_certificate.default.domain_validation_options[count.index]
 }
 
@@ -32,11 +31,12 @@ resource "aws_acm_certificate_validation" "default" {
 }
 
 resource "aws_route53_record" "default" {
-  count   = length(null_resource.default[0].triggers)
-  zone_id = data.aws_route53_zone.default[0].zone_id
-  name    = "null_resource.default.${count.index}" ["resource_record_name"]
-  type    = "null_resource.default.${count.index}" ["resource_record_type"]
+  count   = length(null_resource.default.triggers)
+  zone_id = data.aws_route53_zone.default.zone_id
+  name    = lookup("null_resource.default.${count.index}", "resource_record_name")
+  type    = lookup("null_resource.default.${count.index}", "resource_record_type")
   ttl     = var.ttl
-  records = ["null_resource.default.${count.index}" ["resource_record_value"]]
+  records = [lookup("null_resource.default.${count.index}", "resource_record_value")]
+
 }
 
