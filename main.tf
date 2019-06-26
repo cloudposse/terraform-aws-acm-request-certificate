@@ -21,7 +21,7 @@ locals {
 }
 
 resource "null_resource" "default" {
-  count    = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0
+  count    = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) - 1 : 0
   triggers = aws_acm_certificate.default.domain_validation_options[count.index]
 }
 
