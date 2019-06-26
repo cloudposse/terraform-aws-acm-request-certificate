@@ -3,10 +3,10 @@ output "id" {
   description = "The ARN of the certificate"
 }
 
-output "arn" {
-  value       = aws_acm_certificate_validation.default.certificate_arn
-  description = "The ARN of the certificate"
-}
+//output "arn" {
+//  value       = aws_acm_certificate_validation.default.certificate_arn
+//  description = "The ARN of the certificate"
+//}
 
 output "domain_validation_options" {
   value       = aws_acm_certificate.default.domain_validation_options
