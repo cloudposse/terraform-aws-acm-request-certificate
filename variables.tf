@@ -10,8 +10,8 @@ variable "validation_method" {
 }
 
 variable "process_domain_validation_options" {
-  type        = string
-  default     = "true"
+  type        = bool
+  default     = true
   description = "Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation"
 }
 
