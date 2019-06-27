@@ -1,3 +1,9 @@
+variable "enabled" {
+  type        = bool
+  default     = true
+  description = "Set to false to prevent the module from creating or accessing any resources"
+}
+
 variable "domain_name" {
   type        = string
   description = "A domain name for which the certificate should be issued"
