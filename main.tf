@@ -19,12 +19,6 @@ data "aws_route53_zone" "default" {
   private_zone = false
 }
 
-resource "aws_acm_certificate_validation" "default" {
-  count                   = var.process_domain_validation_options ? 1 : 0
-  certificate_arn         = aws_acm_certificate.default.arn
-  validation_record_fqdns = distinct(compact(concat(aws_route53_record.default.*.fqdn, var.subject_alternative_names)))
-}
-
 resource "aws_route53_record" "default" {
   count   = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0
   zone_id = join("", data.aws_route53_zone.default.*.zone_id)
@@ -32,4 +26,10 @@ resource "aws_route53_record" "default" {
   type    = lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_type")
   ttl     = var.ttl
   records = [lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_value")]
+}
+
+resource "aws_acm_certificate_validation" "default" {
+  count                   = var.process_domain_validation_options ? 1 : 0
+  certificate_arn         = aws_acm_certificate.default.arn
+  validation_record_fqdns = distinct(compact(concat(aws_route53_record.default.*.fqdn, var.subject_alternative_names)))
 }
