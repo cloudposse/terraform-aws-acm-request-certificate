@@ -37,8 +37,3 @@ variable "ttl" {
   type        = string
   description = "The TTL of the record to add to the DNS zone to complete certificate validation"
 }
-
-variable "subject_alternative_names" {
-  type        = list(string)
-  description = "A list of domains that should be SANs in the issued certificate"
-}
