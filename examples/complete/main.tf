@@ -14,8 +14,9 @@ module "zone" {
 module "acm_request_certificate" {
   source                            = "../../"
   domain_name                       = module.zone.zone_name
-  process_domain_validation_options = var.process_domain_validation_options
   validation_method                 = var.validation_method
   ttl                               = var.ttl
   subject_alternative_names         = ["*.${module.zone.zone_name}"]
+  process_domain_validation_options = var.process_domain_validation_options
+  wait_for_certificate_issued       = var.wait_for_certificate_issued
 }

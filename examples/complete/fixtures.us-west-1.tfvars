@@ -14,4 +14,4 @@ ttl = "300"
 
 process_domain_validation_options = true
 
-wait_for_certificate_issued = true
+wait_for_certificate_issued = false
