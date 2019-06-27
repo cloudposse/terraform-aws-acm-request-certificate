@@ -25,7 +25,7 @@ resource "null_resource" "default" {
 }
 
 resource "aws_route53_record" "default" {
-  count   = length(null_resource.default.triggers)
+  count   = length(null_resource.default.*.triggers)
   zone_id = join("", data.aws_route53_zone.default.*.zone_id)
   ttl     = var.ttl
   name    = lookup(null_resource.default[count.index].triggers, "resource_record_name")
