@@ -17,5 +17,5 @@ module "acm_request_certificate" {
   process_domain_validation_options = var.process_domain_validation_options
   validation_method                 = var.validation_method
   ttl                               = var.ttl
-  subject_alternative_names         = [concat("*.", module.zone.zone_name)]
+  subject_alternative_names         = ["*.${module.zone.zone_name}"]
 }
