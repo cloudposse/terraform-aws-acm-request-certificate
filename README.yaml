@@ -34,9 +34,9 @@ github_repo: cloudposse/terraform-aws-acm-request-certificate
 
 # Badges to display
 badges:
-  - name: "Build Status"
-    image: "https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate.svg?branch=master"
-    url: "https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate"
+  - name: "Codefresh Build Status"
+    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-acm-request-certificate?type=cf-1"
+    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d13bc4da6fc75502872e5f8"
   - name: "Latest Release"
     image: "https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg"
     url: "https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest"
@@ -54,7 +54,7 @@ related:
 
 # Short description of this project
 description: |-
-  Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation 
+  Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation
 
 # How to use this project
 usage: |-
@@ -64,7 +64,7 @@ usage: |-
   module "acm_request_certificate" {
     source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
     domain_name                       = "example.com"
-    process_domain_validation_options = "true"
+    process_domain_validation_options = true
     ttl                               = "300"
   }
   ```
@@ -75,7 +75,7 @@ usage: |-
   module "acm_request_certificate" {
     source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
     domain_name                       = "example.com"
-    process_domain_validation_options = "true"
+    process_domain_validation_options = true
     ttl                               = "300"
     subject_alternative_names         = ["*.example.com"]
   }
@@ -89,5 +89,9 @@ include:
 contributors:
   - name: "Andriy Knysh"
     github: "aknysh"
+  - name: "Erik Osterman"
+    github: "osterman"
+  - name: "Igor Rodionov"
+    github: "goruha"
   - name: "Vladimir"
     github: "SweetOps"
