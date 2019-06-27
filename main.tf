@@ -12,18 +12,18 @@ resource "aws_acm_certificate" "default" {
 
 locals {
   zone_name                         = var.zone_name == "" ? var.domain_name : var.zone_name
-  process_domain_validation_options = var.enabled && var.process_domain_validation_options
-  domain_validation_options_list    = aws_acm_certificate.default.*.domain_validation_options
+  process_domain_validation_options = var.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
+  domain_validation_options_list    = coalescelist(aws_acm_certificate.default.*.domain_validation_options, list({}))
 }
 
 data "aws_route53_zone" "default" {
-  count        = local.process_domain_validation_options && var.validation_method == "DNS" ? 1 : 0
+  count        = local.process_domain_validation_options ? 1 : 0
   name         = "${local.zone_name}."
   private_zone = false
 }
 
 resource "aws_route53_record" "default" {
-  count   = local.process_domain_validation_options && var.validation_method == "DNS" ? length(var.subject_alternative_names) + 1 : 0
+  count   = local.process_domain_validation_options ? length(var.subject_alternative_names) + 1 : 0
   zone_id = join("", data.aws_route53_zone.default.*.zone_id)
   ttl     = var.ttl
   name    = lookup(local.domain_validation_options_list[count.index], "resource_record_name")
