@@ -33,8 +33,8 @@ resource "aws_acm_certificate_validation" "default" {
 resource "aws_route53_record" "default" {
   count   = length(null_resource.default.triggers)
   zone_id = join("", data.aws_route53_zone.default.*.zone_id)
-  name    = "null_resource.default.${count.index}" ["resource_record_name"]
-  type    = "null_resource.default.${count.index}" ["resource_record_type"]
+  name    = lookup("null_resource.default.${count.index}", "resource_record_name")
+  type    = lookup("null_resource.default.${count.index}", "resource_record_type")
   ttl     = var.ttl
-  records = ["null_resource.default.${count.index}" ["resource_record_value"]]
+  records = [lookup("null_resource.default.${count.index}", "resource_record_value")]
 }
