@@ -22,7 +22,7 @@ data "aws_route53_zone" "default" {
 resource "aws_acm_certificate_validation" "default" {
   count                   = var.process_domain_validation_options ? 1 : 0
   certificate_arn         = aws_acm_certificate.default.arn
-  validation_record_fqdns = distinct(compact(concat(aws_route53_record.default.fqdn, var.subject_alternative_names)))
+  validation_record_fqdns = distinct(compact(concat(aws_route53_record.default.*.fqdn, var.subject_alternative_names)))
 }
 
 resource "aws_route53_record" "default" {
