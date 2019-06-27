@@ -19,11 +19,6 @@ data "aws_route53_zone" "default" {
   private_zone = false
 }
 
-resource "null_resource" "default" {
-  count    = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0
-  triggers = aws_acm_certificate.default.domain_validation_options[count.index]
-}
-
 resource "aws_acm_certificate_validation" "default" {
   count                   = var.process_domain_validation_options ? 1 : 0
   certificate_arn         = aws_acm_certificate.default.arn
@@ -31,10 +26,10 @@ resource "aws_acm_certificate_validation" "default" {
 }
 
 resource "aws_route53_record" "default" {
-  count   = length(null_resource.default.triggers)
+  count   = var.process_domain_validation_options && var.validation_method == "DNS" ? length(aws_acm_certificate.default.domain_validation_options) : 0
   zone_id = join("", data.aws_route53_zone.default.*.zone_id)
-  name    = lookup("null_resource.default.${count.index}", "resource_record_name")
-  type    = lookup("null_resource.default.${count.index}", "resource_record_type")
+  name    = lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_name")
+  type    = lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_type")
   ttl     = var.ttl
-  records = [lookup("null_resource.default.${count.index}", "resource_record_value")]
+  records = [lookup(aws_acm_certificate.default.domain_validation_options[count.index], "resource_record_value")]
 }
