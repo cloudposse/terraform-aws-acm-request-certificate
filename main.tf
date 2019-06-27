@@ -13,7 +13,7 @@ resource "aws_acm_certificate" "default" {
 locals {
   zone_name                         = var.zone_name == "" ? var.domain_name : var.zone_name
   process_domain_validation_options = var.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
-  domain_validation_options_list    = coalescelist(aws_acm_certificate.default.*.domain_validation_options, list({}))
+  domain_validation_options_list    = aws_acm_certificate.default.0.domain_validation_options
 }
 
 data "aws_route53_zone" "default" {
