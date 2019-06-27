@@ -4,6 +4,12 @@ variable "enabled" {
   description = "Set to false to prevent the module from creating or accessing any resources"
 }
 
+variable "wait_for_certificate_issued" {
+  type        = bool
+  default     = false
+  description = "Whether to wait for the certificate to be issued by ACM (the certificate status changed from `Pending Validation` to `Issued`)"
+}
+
 variable "domain_name" {
   type        = string
   description = "A domain name for which the certificate should be issued"

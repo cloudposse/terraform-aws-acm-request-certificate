@@ -25,7 +25,7 @@ output "certificate_id" {
 
 output "certificate_arn" {
   value       = module.acm_request_certificate.arn
-  description = "The ARN of the certificate"
+  description = "The ID of the certificate"
 }
 
 output "certificate_domain_validation_options" {

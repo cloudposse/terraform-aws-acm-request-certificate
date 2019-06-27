@@ -4,7 +4,7 @@ output "id" {
 }
 
 output "arn" {
-  value       = join("", aws_acm_certificate_validation.default.*.certificate_arn)
+  value       = join("", aws_acm_certificate.default.*.arn)
   description = "The ARN of the certificate"
 }
 

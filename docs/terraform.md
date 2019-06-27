@@ -9,6 +9,7 @@
 | tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map(string) | `<map>` | no |
 | ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
 | validation_method | Method to use for validation, DNS or EMAIL | string | `DNS` | no |
+| wait_for_certificate_issued | Whether to wait for the certificate to be issued by ACM (the certificate status changed from `Pending Validation` to `Issued`) | bool | `false` | no |
 | zone_name | The name of the desired Route53 Hosted Zone | string | `` | no |
 
 ## Outputs

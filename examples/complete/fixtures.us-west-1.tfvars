@@ -10,6 +10,8 @@ parent_zone_name = "testing.cloudposse.co"
 
 validation_method = "DNS"
 
+ttl = "300"
+
 process_domain_validation_options = true
 
-ttl = "300"
+wait_for_certificate_issued = true

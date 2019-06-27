@@ -37,3 +37,8 @@ variable "ttl" {
   type        = string
   description = "The TTL of the record to add to the DNS zone to complete certificate validation"
 }
+
+variable "wait_for_certificate_issued" {
+  type        = bool
+  description = "Whether to wait for the certificate to be issued by ACM (the certificate status changed from `Pending Validation` to `Issued`)"
+}

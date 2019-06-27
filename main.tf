@@ -33,7 +33,7 @@ resource "aws_route53_record" "default" {
 }
 
 resource "aws_acm_certificate_validation" "default" {
-  count                   = local.process_domain_validation_options ? 1 : 0
+  count                   = local.process_domain_validation_options && var.wait_for_certificate_issued ? 1 : 0
   certificate_arn         = join("", aws_acm_certificate.default.*.arn)
   validation_record_fqdns = aws_route53_record.default.*.fqdn
 }
