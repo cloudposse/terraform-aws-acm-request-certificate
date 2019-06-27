@@ -5,10 +5,10 @@
 
 # terraform-aws-acm-request-certificate
 
- [![Build Status](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate.svg?branch=master)](https://travis-ci.org/cloudposse/terraform-aws-acm-request-certificate) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg)](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
+ [![Codefresh Build Status](https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-acm-request-certificate?type=cf-1)](https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d13bc4da6fc75502872e5f8) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg)](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 
-Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation 
+Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation
 
 
 ---
@@ -44,13 +44,18 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 ## Usage
 
+
+**IMPORTANT:** The `master` branch is used in `source` just as an example. In your code, do not pin to `master` because there may be breaking changes between releases.
+Instead pin to the release tag (e.g. `?ref=tags/x.y.z`) of one of our [latest releases](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases).
+
+
 This example will request an SSL certificate for `example.com` domain
 
 ```hcl
 module "acm_request_certificate" {
   source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
   domain_name                       = "example.com"
-  process_domain_validation_options = "true"
+  process_domain_validation_options = true
   ttl                               = "300"
 }
 ```
@@ -61,7 +66,7 @@ This example will request an SSL certificate for `example.com` domain and all it
 module "acm_request_certificate" {
   source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
   domain_name                       = "example.com"
-  process_domain_validation_options = "true"
+  process_domain_validation_options = true
   ttl                               = "300"
   subject_alternative_names         = ["*.example.com"]
 }
@@ -87,11 +92,11 @@ Available targets:
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | domain_name | A domain name for which the certificate should be issued | string | - | yes |
-| process_domain_validation_options | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation | string | `true` | no |
-| subject_alternative_names | A list of domains that should be SANs in the issued certificate | list | `<list>` | no |
-| tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>` | no |
+| process_domain_validation_options | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation | bool | `true` | no |
+| subject_alternative_names | A list of domains that should be SANs in the issued certificate | list(string) | `<list>` | no |
+| tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map(string) | `<map>` | no |
 | ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
-| validation_method | Which method to use for validation, DNS or EMAIL | string | `DNS` | no |
+| validation_method | Method to use for validation, DNS or EMAIL | string | `DNS` | no |
 | zone_name | The name of the desired Route53 Hosted Zone | string | `` | no |
 
 ## Outputs
@@ -100,7 +105,7 @@ Available targets:
 |------|-------------|
 | arn | The ARN of the certificate |
 | domain_validation_options | CNAME records that are added to the DNS zone to complete certificate validation |
-| id | The ARN of the certificate |
+| id | The ID of the certificate |
 
 
 
@@ -238,11 +243,15 @@ Check out [our other projects][github], [follow us on twitter][twitter], [apply 
 
 ### Contributors
 
-|  [![Andriy Knysh][aknysh_avatar]][aknysh_homepage]<br/>[Andriy Knysh][aknysh_homepage] | [![Vladimir][SweetOps_avatar]][SweetOps_homepage]<br/>[Vladimir][SweetOps_homepage] |
-|---|---|
+|  [![Andriy Knysh][aknysh_avatar]][aknysh_homepage]<br/>[Andriy Knysh][aknysh_homepage] | [![Erik Osterman][osterman_avatar]][osterman_homepage]<br/>[Erik Osterman][osterman_homepage] | [![Igor Rodionov][goruha_avatar]][goruha_homepage]<br/>[Igor Rodionov][goruha_homepage] | [![Vladimir][SweetOps_avatar]][SweetOps_homepage]<br/>[Vladimir][SweetOps_homepage] |
+|---|---|---|---|
 
   [aknysh_homepage]: https://github.com/aknysh
   [aknysh_avatar]: https://github.com/aknysh.png?size=150
+  [osterman_homepage]: https://github.com/osterman
+  [osterman_avatar]: https://github.com/osterman.png?size=150
+  [goruha_homepage]: https://github.com/goruha
+  [goruha_avatar]: https://github.com/goruha.png?size=150
   [SweetOps_homepage]: https://github.com/SweetOps
   [SweetOps_avatar]: https://github.com/SweetOps.png?size=150
 
