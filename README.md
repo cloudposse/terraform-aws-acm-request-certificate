@@ -97,7 +97,6 @@ Available targets:
 | tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>` | no |
 | ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
 | validation_method | Which method to use for validation, DNS or EMAIL | string | `DNS` | no |
-| zone_name | The name of the desired Route53 Hosted Zone | string | `` | no |
 
 ## Outputs
 
