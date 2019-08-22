@@ -44,6 +44,11 @@ We literally have [*hundreds of terraform modules*][terraform_modules] that are 
 
 ## Usage
 
+
+**IMPORTANT:** The `master` branch is used in `source` just as an example. In your code, do not pin to `master` because there may be breaking changes between releases.
+Instead pin to the release tag (e.g. `?ref=tags/x.y.z`) of one of our [latest releases](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases).
+
+
 This example will request an SSL certificate for `example.com` domain
 
 ```hcl
@@ -92,7 +97,6 @@ Available targets:
 | tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>` | no |
 | ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
 | validation_method | Which method to use for validation, DNS or EMAIL | string | `DNS` | no |
-| zone_name | The name of the desired Route53 Hosted Zone | string | `` | no |
 
 ## Outputs
 
