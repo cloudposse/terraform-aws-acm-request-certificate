@@ -12,14 +12,15 @@ data "aws_route53_zone" "default" {
 }
 
 locals {
-  domain_validation_options = "${aws_acm_certificate.default.domain_validation_options[0]}"
+  # Workaround for https://github.com/hashicorp/terraform/issues/18359
+  domain_validation_options = "${flatten(aws_acm_certificate.default.*.domain_validation_options)}"
 }
 
 resource "aws_route53_record" "default" {
   count   = "${var.proces_domain_validation_options == "true" && var.validation_method == "DNS" ? 1 : 0}"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
-  name    = "${local.domain_validation_options["resource_record_name"]}"
-  type    = "${local.domain_validation_options["resource_record_type"]}"
+  name    = "${lookup(local.domain_validation_options[count.index], "resource_record_name")}"
+  type    = "${lookup(local.domain_validation_options[count.index], "resource_record_type")}"
   ttl     = "${var.ttl}"
-  records = ["${local.domain_validation_options["resource_record_value"]}"]
+  records = ["${lookup(local.domain_validation_options[count.index], "resource_record_value")}"]
 }
