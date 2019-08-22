@@ -53,10 +53,10 @@ This example will request an SSL certificate for `example.com` domain
 
 ```hcl
 module "acm_request_certificate" {
-  source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
-  domain_name                      = "example.com"
-  proces_domain_validation_options = "true"
-  ttl                              = "300"
+  source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+  domain_name                       = "example.com"
+  process_domain_validation_options = "true"
+  ttl                               = "300"
 }
 ```
 
@@ -64,11 +64,11 @@ This example will request an SSL certificate for `example.com` domain and all it
 
 ```hcl
 module "acm_request_certificate" {
-  source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
-  domain_name                      = "example.com"
-  proces_domain_validation_options = "true"
-  ttl                              = "300"
-  subject_alternative_names        = ["*.example.com"]
+  source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+  domain_name                       = "example.com"
+  process_domain_validation_options = "true"
+  ttl                               = "300"
+  subject_alternative_names         = ["*.example.com"]
 }
 ```
 
@@ -92,11 +92,12 @@ Available targets:
 | Name | Description | Type | Default | Required |
 |------|-------------|:----:|:-----:|:-----:|
 | domain_name | A domain name for which the certificate should be issued | string | - | yes |
-| proces_domain_validation_options | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation | string | `true` | no |
+| process_domain_validation_options | Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation | string | `true` | no |
 | subject_alternative_names | A list of domains that should be SANs in the issued certificate | list | `<list>` | no |
 | tags | Additional tags (e.g. map('BusinessUnit`,`XYZ`) | map | `<map>` | no |
 | ttl | The TTL of the record to add to the DNS zone to complete certificate validation | string | `300` | no |
 | validation_method | Which method to use for validation, DNS or EMAIL | string | `DNS` | no |
+| zone_name | The name of the desired Route53 Hosted Zone | string | `` | no |
 
 ## Outputs
 

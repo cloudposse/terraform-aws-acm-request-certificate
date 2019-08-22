@@ -9,7 +9,7 @@ variable "validation_method" {
   description = "Which method to use for validation, DNS or EMAIL"
 }
 
-variable "proces_domain_validation_options" {
+variable "process_domain_validation_options" {
   type        = "string"
   default     = "true"
   description = "Flag to enable/disable processing of the record to add to the DNS zone to complete certificate validation"
@@ -31,4 +31,10 @@ variable "subject_alternative_names" {
   type        = "list"
   default     = []
   description = "A list of domains that should be SANs in the issued certificate"
+}
+
+variable "zone_name" {
+  type        = "string"
+  default     = ""
+  description = "The name of the desired Route53 Hosted Zone"
 }

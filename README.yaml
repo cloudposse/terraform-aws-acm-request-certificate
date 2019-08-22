@@ -7,6 +7,22 @@
 # Name of this project
 name: terraform-aws-acm-request-certificate
 
+# Tags of this project
+tags:
+  - aws
+  - terraform
+  - terraform-modules
+  - security
+  - acm
+  - request-certificate
+  - tls
+  - ssl
+  - ssl-certificates
+
+# Categories of this project
+categories:
+  - terraform-modules/security
+
 # Logo for this project
 #logo: docs/logo.png
 
@@ -46,10 +62,10 @@ usage: |-
 
   ```hcl
   module "acm_request_certificate" {
-    source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
-    domain_name                      = "example.com"
-    proces_domain_validation_options = "true"
-    ttl                              = "300"
+    source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+    domain_name                       = "example.com"
+    process_domain_validation_options = "true"
+    ttl                               = "300"
   }
   ```
 
@@ -57,11 +73,11 @@ usage: |-
 
   ```hcl
   module "acm_request_certificate" {
-    source                           = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
-    domain_name                      = "example.com"
-    proces_domain_validation_options = "true"
-    ttl                              = "300"
-    subject_alternative_names        = ["*.example.com"]
+    source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+    domain_name                       = "example.com"
+    process_domain_validation_options = "true"
+    ttl                               = "300"
+    subject_alternative_names         = ["*.example.com"]
   }
   ```
 
