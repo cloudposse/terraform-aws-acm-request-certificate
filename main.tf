@@ -3,15 +3,11 @@ resource "aws_acm_certificate" "default" {
   validation_method         = "${var.validation_method}"
   subject_alternative_names = ["${var.subject_alternative_names}"]
   tags                      = "${var.tags}"
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 data "aws_route53_zone" "default" {
-  count        = "${var.process_domain_validation_options == "true" && var.validation_method == "DNS" ? 1 : 0}"
-  name         = "${local.zone_name}."
+  count        = "${var.proces_domain_validation_options == "true" && var.validation_method == "DNS" ? 1 : 0}"
+  name         = "${var.domain_name}."
   private_zone = false
 }
 
@@ -21,7 +17,7 @@ locals {
 }
 
 resource "aws_route53_record" "default" {
-  count   = "${length(null_resource.default.triggers)}"
+  count   = "${var.proces_domain_validation_options == "true" && var.validation_method == "DNS" ? 1 : 0}"
   zone_id = "${data.aws_route53_zone.default.zone_id}"
   name    = "${lookup(local.domain_validation_options[count.index], "resource_record_name")}"
   type    = "${lookup(local.domain_validation_options[count.index], "resource_record_type")}"
