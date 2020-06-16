@@ -11,14 +11,14 @@ resource "aws_acm_certificate" "default" {
 }
 
 locals {
-  zone_name                         = var.zone_name == "" ? var.domain_name : var.zone_name
+  zone_name                         = var.zone_name == "" ? "${var.domain_name}." : var.zone_name
   process_domain_validation_options = var.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
   domain_validation_options_list    = local.process_domain_validation_options ? aws_acm_certificate.default.0.domain_validation_options : []
 }
 
 data "aws_route53_zone" "default" {
   count        = local.process_domain_validation_options ? 1 : 0
-  name         = "${local.zone_name}."
+  name         = local.zone_name
   private_zone = false
 }
 
