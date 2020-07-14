@@ -1,4 +1,3 @@
----
 #
 # This is the canonical configuration for the `README.md`
 # Run `make readme` to rebuild the `README.md`
@@ -6,7 +5,6 @@
 
 # Name of this project
 name: terraform-aws-acm-request-certificate
-
 # Tags of this project
 tags:
   - aws
@@ -18,32 +16,24 @@ tags:
   - tls
   - ssl
   - ssl-certificates
-
 # Categories of this project
 categories:
   - terraform-modules/security
-
 # Logo for this project
 #logo: docs/logo.png
 
 # License of this project
 license: "APACHE2"
-
 # Canonical GitHub repo
 github_repo: cloudposse/terraform-aws-acm-request-certificate
-
 # Badges to display
 badges:
-  - name: "Codefresh Build Status"
-    image: "https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-acm-request-certificate?type=cf-1"
-    url: "https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d13bc4da6fc75502872e5f8"
   - name: "Latest Release"
     image: "https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg"
     url: "https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest"
   - name: "Slack Community"
     image: "https://slack.cloudposse.com/badge.svg"
     url: "https://slack.cloudposse.com"
-
 related:
   - name: "terraform-tls-ssh-key-pair"
     description: "Terraform module for generating an SSH public/private key file."
@@ -51,11 +41,9 @@ related:
   - name: "terraform-aws-alb"
     description: "Terraform module to provision a standard ALB for HTTP/HTTP traffic"
     url: "https://github.com/cloudposse/terraform-aws-alb"
-
 # Short description of this project
 description: |-
   Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation
-
 # How to use this project
 usage: |-
   This example will request an SSL certificate for `example.com` domain
@@ -80,11 +68,9 @@ usage: |-
     subject_alternative_names         = ["*.example.com"]
   }
   ```
-
 include:
   - "docs/targets.md"
   - "docs/terraform.md"
-
 # Contributors to this project
 contributors:
   - name: "Andriy Knysh"
