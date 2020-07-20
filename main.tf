@@ -17,12 +17,14 @@ locals {
 }
 
 data "aws_route53_zone" "default" {
+  provider     = aws.route53_zone_provider
   count        = local.process_domain_validation_options ? 1 : 0
   name         = "${local.zone_name}."
   private_zone = false
 }
 
 resource "aws_route53_record" "default" {
+  provider        = aws.route53_zone_provider
   count           = local.process_domain_validation_options ? length(var.subject_alternative_names) + 1 : 0
   zone_id         = join("", data.aws_route53_zone.default.*.zone_id)
   ttl             = var.ttl

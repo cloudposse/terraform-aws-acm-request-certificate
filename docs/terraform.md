@@ -12,6 +12,7 @@
 | Name | Version |
 |------|---------|
 | aws | ~> 2.0 |
+| aws.route53\_zone\_provider | ~> 2.0 |
 
 ## Inputs
 

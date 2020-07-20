@@ -68,6 +68,30 @@ usage: |-
     subject_alternative_names         = ["*.example.com"]
   }
   ```
+
+  This example will request an SSL certificate for a zone in a different AWS account
+
+  ```hcl
+  provider "aws" {
+    alias = "remote_account"
+    assume_role {
+      role_arn     = "arn:aws:iam::ACCOUNT_ID:role/ROLE_NAME"
+      session_name = "SESSION_NAME"
+      external_id  = "EXTERNAL_ID"
+    }
+  }
+
+  module "acm_request_certificate" {
+    source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=master"
+    domain_name                       = "example.com"
+    process_domain_validation_options = true
+    ttl                               = "300"
+    subject_alternative_names         = ["*.example.com"]
+    providers {
+      aws.route53_zone_provider = "aws.remote_account"
+    }
+  }
+  ```
 include:
   - "docs/targets.md"
   - "docs/terraform.md"
