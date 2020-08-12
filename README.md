@@ -1,6 +1,8 @@
 # terraform-aws-acm-request-certificate
 
- [![Codefresh Build Status](https://g.codefresh.io/api/badges/pipeline/cloudposse/terraform-modules%2Fterraform-aws-acm-request-certificate?type=cf-1)](https://g.codefresh.io/public/accounts/cloudposse/pipelines/5d13bc4da6fc75502872e5f8) [![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg)](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest) [![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
+[![Latest Release](https://img.shields.io/github/release/cloudposse/terraform-aws-acm-request-certificate.svg)](https://github.com/cloudposse/terraform-aws-acm-request-certificate/releases/latest) 
+
+[![Slack Community](https://slack.cloudposse.com/badge.svg)](https://slack.cloudposse.com)
 
 [![README Header][readme_header_img]][readme_header_link]
 
@@ -22,6 +24,10 @@
   **
 
 
+
+
+
+-->
 
 
 
@@ -112,7 +118,7 @@ Available targets:
 
 | Name | Version |
 |------|---------|
-| terraform | ~> 0.12.0 |
+| terraform | >= 0.12.0, < 0.14.0 |
 | aws | ~> 2.0 |
 | local | ~> 1.2 |
 | null | ~> 2.0 |
