@@ -53,6 +53,6 @@ variable "zone_name" {
 
 variable "certificate_transparency_logging_preference" {
   type        = bool
-  default     = false
+  default     = true
   description = "Specifies whether certificate details should be added to a certificate transparency log"
 }
