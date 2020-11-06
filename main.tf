@@ -23,7 +23,7 @@ data "aws_route53_zone" "default" {
 }
 
 resource "aws_route53_record" "default" {
-  count           = local.process_domain_validation_options ? length(local.domain_validation_options_list) : 0
+  count           = local.process_domain_validation_options ? length(var.subject_alternative_names) + 1 : 0
   zone_id         = join("", data.aws_route53_zone.default.*.zone_id)
   ttl             = var.ttl
   allow_overwrite = true
