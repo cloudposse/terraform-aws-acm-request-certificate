@@ -1,9 +1,9 @@
 resource "aws_acm_certificate" "default" {
-  count                     = var.enabled ? 1 : 0
+  count                     = local.enabled ? 1 : 0
   domain_name               = var.domain_name
   validation_method         = var.validation_method
   subject_alternative_names = var.subject_alternative_names
-  tags                      = var.tags
+  tags                      = module.this.tags
 
   lifecycle {
     create_before_destroy = true
@@ -11,8 +11,9 @@ resource "aws_acm_certificate" "default" {
 }
 
 locals {
+  enabled                           = module.this.enabled
   zone_name                         = var.zone_name == "" ? "${var.domain_name}." : var.zone_name
-  process_domain_validation_options = var.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
+  process_domain_validation_options = local.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
   domain_validation_options_list    = local.process_domain_validation_options ? tolist(aws_acm_certificate.default.0.domain_validation_options) : []
 }
 

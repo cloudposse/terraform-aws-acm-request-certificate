@@ -1,9 +1,3 @@
-variable "enabled" {
-  type        = bool
-  default     = true
-  description = "Set to false to prevent the module from creating or accessing any resources"
-}
-
 variable "wait_for_certificate_issued" {
   type        = bool
   default     = false
@@ -31,12 +25,6 @@ variable "ttl" {
   type        = string
   default     = "300"
   description = "The TTL of the record to add to the DNS zone to complete certificate validation"
-}
-
-variable "tags" {
-  type        = map(string)
-  default     = {}
-  description = "Additional tags (e.g. map('BusinessUnit`,`XYZ`)"
 }
 
 variable "subject_alternative_names" {
