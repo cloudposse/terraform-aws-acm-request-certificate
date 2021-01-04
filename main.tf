@@ -24,17 +24,23 @@ data "aws_route53_zone" "default" {
 }
 
 resource "aws_route53_record" "default" {
-  count           = local.process_domain_validation_options ? length(var.subject_alternative_names) + 1 : 0
+  for_each = {
+    for dvo in local.domain_validation_options_list : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
   zone_id         = join("", data.aws_route53_zone.default.*.zone_id)
   ttl             = var.ttl
   allow_overwrite = true
-  name            = lookup(local.domain_validation_options_list[count.index], "resource_record_name")
-  type            = lookup(local.domain_validation_options_list[count.index], "resource_record_type")
-  records         = [lookup(local.domain_validation_options_list[count.index], "resource_record_value")]
+  name            = each.value.name
+  type            = each.value.type
+  records         = [each.value.record]
 }
 
 resource "aws_acm_certificate_validation" "default" {
   count                   = local.process_domain_validation_options && var.wait_for_certificate_issued ? 1 : 0
   certificate_arn         = join("", aws_acm_certificate.default.*.arn)
-  validation_record_fqdns = aws_route53_record.default.*.fqdn
+  validation_record_fqdns = [for record in aws_route53_record.default : record.fqdn]
 }
