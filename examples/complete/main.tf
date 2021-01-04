@@ -3,7 +3,8 @@ provider "aws" {
 }
 
 module "zone" {
-  source           = "git::https://github.com/cloudposse/terraform-aws-route53-cluster-zone.git?ref=tags/0.4.0"
+  source           = "cloudposse/route53-cluster-zone/aws"
+  version          = "0.4.0"
   namespace        = var.namespace
   stage            = var.stage
   name             = var.name
