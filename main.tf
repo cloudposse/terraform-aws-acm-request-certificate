@@ -14,7 +14,6 @@ locals {
   enabled                           = module.this.enabled
   zone_name                         = var.zone_name == "" ? "${var.domain_name}." : var.zone_name
   process_domain_validation_options = local.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
-  domain_validation_options_set     = local.process_domain_validation_options ? aws_acm_certificate.default.0.domain_validation_options : toset([])
 }
 
 data "aws_route53_zone" "default" {
@@ -25,11 +24,11 @@ data "aws_route53_zone" "default" {
 
 resource "aws_route53_record" "default" {
   for_each = {
-    for dvo in local.domain_validation_options_set : dvo.domain_name => {
+    for dvo in aws_acm_certificate.default.0.domain_validation_options : dvo.domain_name => {
       name   = dvo.resource_record_name
       record = dvo.resource_record_value
       type   = dvo.resource_record_type
-    }
+    } if local.process_domain_validation_options
   }
   zone_id         = join("", data.aws_route53_zone.default.*.zone_id)
   ttl             = var.ttl
