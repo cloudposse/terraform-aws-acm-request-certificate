@@ -14,6 +14,21 @@
 |------|---------|
 | aws | >= 3.0 |
 
+## Modules
+
+| Name | Source | Version |
+|------|--------|---------|
+| this | cloudposse/label/null | 0.24.1 |
+
+## Resources
+
+| Name |
+|------|
+| [aws_acm_certificate](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate) |
+| [aws_acm_certificate_validation](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/acm_certificate_validation) |
+| [aws_route53_record](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/route53_record) |
+| [aws_route53_zone](https://registry.terraform.io/providers/hashicorp/aws/latest/docs/data-sources/route53_zone) |
+
 ## Inputs
 
 | Name | Description | Type | Default | Required |
@@ -48,5 +63,4 @@
 | arn | The ARN of the certificate |
 | domain\_validation\_options | CNAME records that are added to the DNS zone to complete certificate validation |
 | id | The ID of the certificate |
-
 <!-- markdownlint-restore -->
