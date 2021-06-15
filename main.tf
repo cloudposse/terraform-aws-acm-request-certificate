@@ -6,8 +6,7 @@ resource "aws_acm_certificate" "default" {
   options {
     certificate_transparency_logging_preference = var.certificate_transparency_logging_preference ? "ENABLED" : "DISABLED"
   }
-  tags                      = module.this.tags
-
+  tags = module.this.tags
   lifecycle {
     create_before_destroy = true
   }
