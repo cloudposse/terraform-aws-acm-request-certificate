@@ -2,11 +2,14 @@ provider "aws" {
   region = var.region
 }
 
+resource "random_string" "zone_name" {
+  length = 10
+}
 module "zone" {
   source           = "cloudposse/route53-cluster-zone/aws"
   version          = "0.12.0"
   parent_zone_name = var.parent_zone_name
-  zone_name        = "$${name}.$${parent_zone_name}"
+  zone_name        = "${random_string.zone_name.result}.$${parent_zone_name}"
 
   context = module.this.context
 }
