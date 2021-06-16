@@ -4,7 +4,7 @@ namespace = "eg"
 
 stage = "test"
 
-name = "test-zone"
+name = "test-zone-2"
 
 parent_zone_name = "testing.cloudposse.co"
 
