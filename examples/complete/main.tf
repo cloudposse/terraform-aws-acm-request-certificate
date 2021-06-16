@@ -3,7 +3,10 @@ provider "aws" {
 }
 
 resource "random_string" "zone_name" {
-  length = 10
+  length  = 10
+  special = false
+  upper   = false
+  lower   = true
 }
 module "zone" {
   source           = "cloudposse/route53-cluster-zone/aws"
