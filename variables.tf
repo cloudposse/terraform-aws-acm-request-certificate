@@ -48,3 +48,9 @@ variable "zone_name" {
   default     = ""
   description = "The name of the desired Route53 Hosted Zone"
 }
+
+variable "certificate_transparency_logging_preference" {
+  type        = bool
+  default     = true
+  description = "Specifies whether certificate details should be added to a certificate transparency log"
+}
