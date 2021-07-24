@@ -38,7 +38,7 @@ variable "subject_alternative_names" {
   description = "A list of domains that should be SANs in the issued certificate"
 
   validation {
-    condition     = length([for name in var.subject_alternative_names : name if can(regex("[A-Z]", name))]) > 0
+    condition     = length([for name in var.subject_alternative_names : name if can(regex("[A-Z]", name))]) == 0
     error_message = "All SANs must be lower-case."
   }
 }
