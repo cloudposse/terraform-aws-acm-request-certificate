@@ -42,7 +42,7 @@ variable "zone_name" {
 variable "zone_id" {
   type        = string
   default     = null
-  description = "The zone id of the Route53 Hosted Zone which can be used instead of `var.zone_name`.
+  description = "The zone id of the Route53 Hosted Zone which can be used instead of `var.zone_name`."
 }
 
 variable "certificate_transparency_logging_preference" {
