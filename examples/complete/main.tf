@@ -6,7 +6,7 @@ module "zone" {
   source           = "cloudposse/route53-cluster-zone/aws"
   version          = "0.12.0"
   parent_zone_name = var.parent_zone_name
-  zone_name        = "${{name}}.${{parent_zone_name}}"
+  zone_name        = "${var.name}.${var.parent_zone_name}"
 
   context = module.this.context
 }
