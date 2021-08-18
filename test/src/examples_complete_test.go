@@ -28,7 +28,7 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	zoneName := terraform.Output(t, terraformOptions, "zone_name")
 
-	expectedZoneName := "test-zone-2.testing.cloudposse.co"
+	expectedZoneName := "test-zone.testing.cloudposse.co"
 	// Verify we're getting back the outputs we expect
 	assert.Equal(t, expectedZoneName, zoneName)
 
