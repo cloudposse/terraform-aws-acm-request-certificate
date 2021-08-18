@@ -13,6 +13,7 @@ module "zone" {
 
 module "acm_request_certificate" {
   source                            = "../../"
+  domain_name                       = module.zone.zone_name
   zone_id                           = module.zone.zone_id
   validation_method                 = var.validation_method
   ttl                               = var.ttl
