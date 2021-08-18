@@ -21,7 +21,8 @@ locals {
 
 data "aws_route53_zone" "default" {
   count        = local.process_domain_validation_options ? 1 : 0
-  name         = local.zone_name
+  zone_id      = var.zone_id
+  name         = try(length(var.zone_id), 0) == 0 ? local.zone_name : null
   private_zone = false
 }
 
