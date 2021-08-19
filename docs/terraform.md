@@ -53,6 +53,7 @@
 | <a name="input_ttl"></a> [ttl](#input\_ttl) | The TTL of the record to add to the DNS zone to complete certificate validation | `string` | `"300"` | no |
 | <a name="input_validation_method"></a> [validation\_method](#input\_validation\_method) | Method to use for validation, DNS or EMAIL | `string` | `"DNS"` | no |
 | <a name="input_wait_for_certificate_issued"></a> [wait\_for\_certificate\_issued](#input\_wait\_for\_certificate\_issued) | Whether to wait for the certificate to be issued by ACM (the certificate status changed from `Pending Validation` to `Issued`) | `bool` | `false` | no |
+| <a name="input_zone_id"></a> [zone\_id](#input\_zone\_id) | The zone id of the Route53 Hosted Zone which can be used instead of `var.zone_name`. | `string` | `null` | no |
 | <a name="input_zone_name"></a> [zone\_name](#input\_zone\_name) | The name of the desired Route53 Hosted Zone | `string` | `""` | no |
 
 ## Outputs
