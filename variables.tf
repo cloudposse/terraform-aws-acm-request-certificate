@@ -50,3 +50,9 @@ variable "certificate_transparency_logging_preference" {
   default     = true
   description = "Specifies whether certificate details should be added to a certificate transparency log"
 }
+
+variable "certificate_authority_arn" {
+  type        = string
+  default     = null
+  description = "ARN of an ACM PCA"
+}
