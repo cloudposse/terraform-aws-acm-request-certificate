@@ -17,3 +17,9 @@ output "validation_id" {
   value       = join("", aws_acm_certificate_validation.default.*.id)
   description = "The ID of the certificate validation"
 }
+
+
+output "validation_status" {
+  value       = join("", aws_acm_certificate.default.*.status)
+  description = "The STATUS of the certificate"
+}
