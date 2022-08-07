@@ -67,5 +67,6 @@
 | <a name="output_arn"></a> [arn](#output\_arn) | The ARN of the certificate |
 | <a name="output_domain_validation_options"></a> [domain\_validation\_options](#output\_domain\_validation\_options) | CNAME records that are added to the DNS zone to complete certificate validation |
 | <a name="output_id"></a> [id](#output\_id) | The ID of the certificate |
+| <a name="output_validation_arn"></a> [validation\_arn](#output\_validation\_arn) | The ARN of the certificate validation |
 | <a name="output_validation_id"></a> [validation\_id](#output\_validation\_id) | The ID of the certificate validation |
 <!-- markdownlint-restore -->
