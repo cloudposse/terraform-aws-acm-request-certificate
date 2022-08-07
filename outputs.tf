@@ -24,7 +24,3 @@ output "validation_arn" {
   description = "The ARN of the certificate validation"
 }
 
-output "validation_status" {
-  value       = join("", aws_acm_certificate.default.*.status)
-  description = "The STATUS of the certificate"
-}
