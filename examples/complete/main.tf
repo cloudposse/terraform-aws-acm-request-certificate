@@ -23,3 +23,24 @@ module "acm_request_certificate" {
 
   context = module.this.context
 }
+
+module "zone_multiple" {
+  source           = "cloudposse/route53-cluster-zone/aws"
+  version          = "0.12.0"
+  parent_zone_name = "multiple.${var.parent_zone_name}"
+  zone_name        = "$${name}.$${parent_zone_name}"
+
+  context = module.this.context
+}
+
+module "acm_request_certificate_multiple" {
+  source                            = "../../"
+  domain_name                       = "*.xyz.${module.zone.zone_name}"
+  validation_method                 = var.validation_method
+  ttl                               = var.ttl
+  subject_alternative_names         = ["*.${module.zone.zone_name}", "*.${module.zone_multiple.zone_name}"]
+  process_domain_validation_options = var.process_domain_validation_options
+  wait_for_certificate_issued       = var.wait_for_certificate_issued
+
+  context = module.this.context
+}
