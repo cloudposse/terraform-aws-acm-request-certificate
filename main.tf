@@ -9,7 +9,7 @@ locals {
     var.subject_alternative_names
   )
   domain_to_zone = {
-    for domain in concat([local.acm_domain_name], local.acm_subject_alternative_names):
+    for domain in concat([local.acm_domain_name], local.acm_subject_alternative_names) :
     domain => join(".", slice(split(".", domain), 1, length(split(".", domain))))
   }
   unique_zones = distinct(values(local.domain_to_zone))
