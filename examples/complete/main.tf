@@ -35,7 +35,7 @@ module "zone_multiple" {
 
 module "acm_request_certificate_multiple" {
   source                            = "../../"
-  domain_name                       = "*.xyz.${module.zone.zone_name}"
+  domain_name                       = "xyz.${module.zone.zone_name}"
   validation_method                 = var.validation_method
   ttl                               = var.ttl
   subject_alternative_names         = ["*.${module.zone.zone_name}", "*.${module.zone_multiple.zone_name}"]
