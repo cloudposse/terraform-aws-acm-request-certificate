@@ -27,8 +27,8 @@ module "acm_request_certificate" {
 module "zone_multiple" {
   source           = "cloudposse/route53-cluster-zone/aws"
   version          = "0.12.0"
-  parent_zone_name = "multiple.${var.parent_zone_name}"
-  zone_name        = "$${name}.$${parent_zone_name}"
+  parent_zone_name = var.parent_zone_name
+  zone_name        = "multiple.$${name}.$${parent_zone_name}"
 
   context = module.this.context
 }
