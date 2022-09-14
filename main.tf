@@ -1,6 +1,5 @@
 locals {
   enabled                           = module.this.enabled
-  zone_name                         = var.zone_name == "" ? "${var.domain_name}." : var.zone_name
   process_domain_validation_options = local.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
   domain_validation_options_set     = local.process_domain_validation_options ? aws_acm_certificate.default.0.domain_validation_options : toset([])
 
@@ -36,7 +35,7 @@ resource "aws_acm_certificate" "default" {
 data "aws_route53_zone" "default" {
   for_each     = local.process_domain_validation_options ? toset(local.unique_zones) : toset([])
   zone_id      = var.zone_id
-  name         = var.zone_name != "" ? var.zone_name : each.key
+  name         = try(length(var.zone_id), 0) == 0 ? each.key : null
   private_zone = false
 }
 
