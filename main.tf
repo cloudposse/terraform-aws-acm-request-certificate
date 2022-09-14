@@ -35,7 +35,7 @@ resource "aws_acm_certificate" "default" {
 data "aws_route53_zone" "default" {
   for_each     = local.process_domain_validation_options ? toset(local.unique_zones) : toset([])
   zone_id      = var.zone_id
-  name         = try(length(var.zone_id), 0) == 0 ? each.key : null
+  name         = try(length(var.zone_id), 0) == 0 ? (var.zone_name == "" ? each.key : var.zone_name) : null
   private_zone = false
 }
 
