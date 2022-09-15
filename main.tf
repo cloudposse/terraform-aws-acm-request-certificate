@@ -2,6 +2,8 @@ locals {
   enabled                           = module.this.enabled
   process_domain_validation_options = local.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
   domain_validation_options_set     = local.process_domain_validation_options ? aws_acm_certificate.default.0.domain_validation_options : toset([])
+  public_enabled                    = var.certificate_authority_arn == null
+  private_enabled                   = ! local.public_enabled
 
   all_domains = concat(
     [var.domain_name],
@@ -15,9 +17,10 @@ locals {
 }
 
 resource "aws_acm_certificate" "default" {
-  count                     = local.enabled ? 1 : 0
+  count = local.enabled ? 1 : 0
+
   domain_name               = var.domain_name
-  validation_method         = var.validation_method
+  validation_method         = local.public_enabled ? var.validation_method : null
   subject_alternative_names = var.subject_alternative_names
   certificate_authority_arn = var.certificate_authority_arn
 
@@ -36,7 +39,7 @@ data "aws_route53_zone" "default" {
   for_each     = local.process_domain_validation_options ? toset(local.unique_zones) : toset([])
   zone_id      = var.zone_id
   name         = try(length(var.zone_id), 0) == 0 ? (var.zone_name == "" ? each.key : var.zone_name) : null
-  private_zone = false
+  private_zone = local.private_enabled
 }
 
 resource "aws_route53_record" "default" {
