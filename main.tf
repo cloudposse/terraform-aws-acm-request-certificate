@@ -7,13 +7,22 @@ locals {
 
   all_domains = concat(
     [var.domain_name],
-    var.subject_alternative_names
+    [for name in var.subject_alternative_names : name["names"]]
   )
-  domain_to_zone = {
-    for domain in local.all_domains :
-    domain => join(".", slice(split(".", domain), 1, length(split(".", domain))))
+
+  unique_zones = distinct(values(local.domain_to_zones))
+  domain_to_zones = {
+      for zone in var.subject_alternative_names : zone.zone_to_lookup => zone.names
   }
-  unique_zones = distinct(values(local.domain_to_zone))
+  zones = keys(local.domain_to_zones)
+}
+
+
+data "aws_route53_zone" "default" {
+  for_each     = local.process_domain_validation_options ? toset(local.zones) : toset([])
+  zone_id      = var.zone_id
+  name         = try(length(var.zone_id), 0) == 0 ? (var.zone_name == "" ? each.key : var.zone_name) : null
+  private_zone = local.private_enabled
 }
 
 resource "aws_acm_certificate" "default" {
@@ -21,7 +30,7 @@ resource "aws_acm_certificate" "default" {
 
   domain_name               = var.domain_name
   validation_method         = local.public_enabled ? var.validation_method : null
-  subject_alternative_names = var.subject_alternative_names
+  subject_alternative_names = flatten([ for name in var.subject_alternative_names : name["names"] ])
   certificate_authority_arn = var.certificate_authority_arn
 
   options {
@@ -35,11 +44,15 @@ resource "aws_acm_certificate" "default" {
   }
 }
 
-data "aws_route53_zone" "default" {
-  for_each     = local.process_domain_validation_options ? toset(local.unique_zones) : toset([])
-  zone_id      = var.zone_id
-  name         = try(length(var.zone_id), 0) == 0 ? (var.zone_name == "" ? each.key : var.zone_name) : null
-  private_zone = local.private_enabled
+# data "aws_route53_zone" "default" {
+#   for_each     = local.process_domain_validation_options ? toset(local.unique_zones) : toset([])
+#   zone_id      = var.zone_id
+#   name         = try(length(var.zone_id), 0) == 0 ? (var.zone_name == "" ? each.key : var.zone_name) : null
+#   private_zone = local.private_enabled
+# }
+
+output "unique_zones" {
+  value = data.aws_route53_zone.default
 }
 
 resource "aws_route53_record" "default" {
@@ -50,7 +63,7 @@ resource "aws_route53_record" "default" {
       type   = dvo.resource_record_type
     }
   }
-  zone_id         = data.aws_route53_zone.default[local.domain_to_zone[each.key]].id
+  zone_id         = data.aws_route53_zone.default[local.domain_to_zones[each.value.name]].id
   ttl             = var.ttl
   allow_overwrite = true
   name            = each.value.name
@@ -58,8 +71,8 @@ resource "aws_route53_record" "default" {
   records         = [each.value.record]
 }
 
-resource "aws_acm_certificate_validation" "default" {
-  count                   = local.process_domain_validation_options && var.wait_for_certificate_issued ? 1 : 0
-  certificate_arn         = join("", aws_acm_certificate.default.*.arn)
-  validation_record_fqdns = [for record in aws_route53_record.default : record.fqdn]
-}
+# resource "aws_acm_certificate_validation" "default" {
+#   count                   = local.process_domain_validation_options && var.wait_for_certificate_issued ? 1 : 0
+#   certificate_arn         = join("", aws_acm_certificate.default.*.arn)
+#   validation_record_fqdns = [for record in aws_route53_record.default : record.fqdn]
+# }
