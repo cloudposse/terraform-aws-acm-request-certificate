@@ -12,7 +12,7 @@ locals {
 
   unique_zones = distinct(values(local.domain_to_zones))
   domain_to_zones = {
-      for zone in var.subject_alternative_names : zone.zone_to_lookup => zone.names
+    for zone in var.subject_alternative_names : zone.zone_to_lookup => zone.names
   }
   zones = keys(local.domain_to_zones)
 }
@@ -30,7 +30,7 @@ resource "aws_acm_certificate" "default" {
 
   domain_name               = var.domain_name
   validation_method         = local.public_enabled ? var.validation_method : null
-  subject_alternative_names = flatten([ for name in var.subject_alternative_names : name["names"] ])
+  subject_alternative_names = flatten([for name in var.subject_alternative_names : name["names"]])
   certificate_authority_arn = var.certificate_authority_arn
 
   options {
