@@ -1,19 +1,10 @@
 locals {
   enabled                           = module.this.enabled
+  zone_name                         = var.zone_name == "" ? "${var.domain_name}." : var.zone_name
   process_domain_validation_options = local.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
   domain_validation_options_set     = local.process_domain_validation_options ? aws_acm_certificate.default.0.domain_validation_options : toset([])
   public_enabled                    = var.certificate_authority_arn == null
   private_enabled                   = ! local.public_enabled
-
-  all_domains = concat(
-    [var.domain_name],
-    var.subject_alternative_names
-  )
-  domain_to_zone = {
-    for domain in local.all_domains :
-    domain => join(".", slice(split(".", domain), 1, length(split(".", domain))))
-  }
-  unique_zones = distinct(values(local.domain_to_zone))
 }
 
 resource "aws_acm_certificate" "default" {
@@ -36,9 +27,9 @@ resource "aws_acm_certificate" "default" {
 }
 
 data "aws_route53_zone" "default" {
-  for_each     = local.process_domain_validation_options ? toset(local.unique_zones) : toset([])
+  count        = local.process_domain_validation_options ? 1 : 0
   zone_id      = var.zone_id
-  name         = try(length(var.zone_id), 0) == 0 ? (var.zone_name == "" ? each.key : var.zone_name) : null
+  name         = try(length(var.zone_id), 0) == 0 ? local.zone_name : null
   private_zone = local.private_enabled
 }
 
@@ -50,7 +41,7 @@ resource "aws_route53_record" "default" {
       type   = dvo.resource_record_type
     }
   }
-  zone_id         = data.aws_route53_zone.default[local.domain_to_zone[each.key]].id
+  zone_id         = join("", data.aws_route53_zone.default.*.zone_id)
   ttl             = var.ttl
   allow_overwrite = true
   name            = each.value.name
