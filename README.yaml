@@ -41,9 +41,11 @@ related:
   - name: "terraform-aws-alb"
     description: "Terraform module to provision a standard ALB for HTTP/HTTP traffic"
     url: "https://github.com/cloudposse/terraform-aws-alb"
+
 # Short description of this project
 description: |-
   Terraform module to request an ACM certificate for a domain and add a CNAME record to the DNS zone to complete certificate validation
+
 # How to use this project
 usage: |-
   This example will request an SSL certificate for `example.com` domain
@@ -53,6 +55,11 @@ usage: |-
     source = "cloudposse/acm-request-certificate/aws"
     # Cloud Posse recommends pinning every module to a specific version
     # version = "x.x.x"
+
+    # zone_id and zone_name are optional. If omitted, the module will try to
+    # calculate which zone_name to add the validation records to using both
+    # domain_name and subject_alternative_names
+    zone_name                         = "example.com"
     domain_name                       = "example.com"
     process_domain_validation_options = true
     ttl                               = "300"
@@ -66,15 +73,22 @@ usage: |-
     source = "cloudposse/acm-request-certificate/aws"
     # Cloud Posse recommends pinning every module to a specific version
     # version = "x.x.x"
+
+    # zone_id and zone_name are optional. If omitted, the module will try to
+    # calculate which zone_name to add the validation records to using both
+    # domain_name and subject_alternative_names
+    zone_name                         = "example.com"
     domain_name                       = "example.com"
     process_domain_validation_options = true
     ttl                               = "300"
     subject_alternative_names         = ["*.example.com"]
   }
   ```
+
 include:
   - "docs/targets.md"
   - "docs/terraform.md"
+
 # Contributors to this project
 contributors:
   - name: "Andriy Knysh"
