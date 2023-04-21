@@ -11,7 +11,7 @@ locals {
   )
   domain_to_zone = {
     for domain in local.all_domains :
-    domain => join(".", slice(split(".", domain), 1, length(split(".", domain))))
+    domain => length(split(".", domain)) > 2 ? join(".", slice(split(".", domain), 1, length(split(".", domain)))) : domain
   }
   unique_zones = distinct(values(local.domain_to_zone))
 }
