@@ -66,3 +66,9 @@ variable "certificate_authority_arn" {
   default     = null
   description = "ARN of an ACM PCA"
 }
+
+variable "key_algorithm" {
+  type        = string
+  default     = null
+  description = "Specifies the algorithm of the public and private key pair that your Amazon issued certificate uses to encrypt data"
+}

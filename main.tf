@@ -1,7 +1,7 @@
 locals {
   enabled                           = module.this.enabled
   process_domain_validation_options = local.enabled && var.process_domain_validation_options && var.validation_method == "DNS"
-  domain_validation_options_set     = local.process_domain_validation_options ? aws_acm_certificate.default.0.domain_validation_options : toset([])
+  domain_validation_options_set     = local.process_domain_validation_options ? aws_acm_certificate.default[0].domain_validation_options : toset([])
   public_enabled                    = var.certificate_authority_arn == null
   private_enabled                   = !local.public_enabled
 
@@ -23,6 +23,7 @@ resource "aws_acm_certificate" "default" {
   validation_method         = local.public_enabled ? var.validation_method : null
   subject_alternative_names = var.subject_alternative_names
   certificate_authority_arn = var.certificate_authority_arn
+  key_algorithm             = var.key_algorithm
 
   options {
     certificate_transparency_logging_preference = var.certificate_transparency_logging_preference ? "ENABLED" : "DISABLED"
@@ -60,6 +61,6 @@ resource "aws_route53_record" "default" {
 
 resource "aws_acm_certificate_validation" "default" {
   count                   = local.process_domain_validation_options && var.wait_for_certificate_issued ? 1 : 0
-  certificate_arn         = join("", aws_acm_certificate.default.*.arn)
+  certificate_arn         = join("", aws_acm_certificate.default[*].arn)
   validation_record_fqdns = [for record in aws_route53_record.default : record.fqdn]
 }
