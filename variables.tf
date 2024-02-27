@@ -9,7 +9,7 @@ variable "domain_name" {
   description = "A domain name for which the certificate should be issued"
 
   validation {
-    condition     = ! can(regex("[A-Z]", var.domain_name))
+    condition     = !can(regex("[A-Z]", var.domain_name))
     error_message = "Domain name must be lower-case."
   }
 }
@@ -65,4 +65,10 @@ variable "certificate_authority_arn" {
   type        = string
   default     = null
   description = "ARN of an ACM PCA"
+}
+
+variable "key_algorithm" {
+  type        = string
+  default     = null
+  description = "Specifies the algorithm of the public and private key pair that your Amazon issued certificate uses to encrypt data"
 }
