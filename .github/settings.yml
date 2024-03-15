@@ -1,0 +1,7 @@
+# Upstream changes from _extends are only recognized when modifications are made to this file in the default branch.
+_extends: .github
+repository:
+  name: terraform-aws-acm-request-certificate
+  description: Terraform module to request an ACM certificate for a domain name and create a CNAME record in the DNS zone to complete certificate validation
+  homepage: https://cloudposse.com/accelerate
+  topics: terraform, terraform-modules, aws, acm, request-certificate, tls, ssl, ssl-certificates, hcl2
