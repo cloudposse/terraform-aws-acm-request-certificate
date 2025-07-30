@@ -56,7 +56,7 @@ func TestExamplesComplete(t *testing.T) {
 	// Run `terraform output` to get the value of an output variable
 	zoneName := terraform.Output(t, terraformOptions, "zone_name")
 
-	expectedZoneName := "test-zone-2.testing.cloudposse.co"
+	expectedZoneName := "test-zone-2.modules.cptest.test-automation.app"
 	// Verify we're getting back the outputs we expect
 	assert.Equal(t, expectedZoneName, zoneName)
 
@@ -64,7 +64,7 @@ func TestExamplesComplete(t *testing.T) {
 	certificateArn := terraform.Output(t, terraformOptions, "certificate_arn")
 
 	// Verify we're getting back the outputs we expect
-	assert.Contains(t, certificateArn, "arn:aws:acm:us-west-1:126450723953:certificate/")
+	assert.Contains(t, certificateArn, "arn:aws:acm:us-west-1:799847381734:certificate/")
 }
 
 func TestExamplesCompleteDisabled(t *testing.T) {
