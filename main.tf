@@ -18,6 +18,7 @@ resource "aws_acm_certificate" "default" {
 
   options {
     certificate_transparency_logging_preference = var.certificate_transparency_logging_preference ? "ENABLED" : "DISABLED"
+    export = var.certificate_export ? "ENABLED" : "DISABLED"
   }
 
   tags = module.this.tags
