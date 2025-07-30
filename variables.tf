@@ -55,6 +55,12 @@ variable "zone_id" {
   description = "The zone id of the Route53 Hosted Zone which can be used instead of `var.zone_name`."
 }
 
+variable "certificate_export" {
+  type        = bool
+  default     = false
+  description = "Specifies whether the certificate can be exported"
+}
+
 variable "certificate_transparency_logging_preference" {
   type        = bool
   default     = true
