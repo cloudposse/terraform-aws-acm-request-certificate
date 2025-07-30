@@ -1,25 +1,25 @@
 output "parent_zone_id" {
-  value = module.zone.parent_zone_id
+  value       = module.zone.parent_zone_id
   description = "The zone id of the parent Route53 Hosted Zone"
 }
 
 output "parent_zone_name" {
-  value = module.zone.parent_zone_name
+  value       = module.zone.parent_zone_name
   description = "The name of the parent Route53 Hosted Zone"
 }
 
 output "zone_id" {
-  value = module.zone.zone_id
+  value       = module.zone.zone_id
   description = "The zone id of the Route53 Hosted Zone"
 }
 
 output "zone_name" {
-  value = module.zone.zone_name
+  value       = module.zone.zone_name
   description = "The name of the desired Route53 Hosted Zone"
 }
 
 output "zone_fqdn" {
-  value = module.zone.fqdn
+  value       = module.zone.fqdn
   description = "The FQDN of the desired Route53 Hosted Zone"
 }
 
