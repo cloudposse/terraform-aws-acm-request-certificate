@@ -58,7 +58,7 @@ variable "zone_id" {
 variable "certificate_export" {
   type        = bool
   default     = false
-  description = "Specifies whether the certificate can be exported"
+  description = "Specifies whether the certificate can be exported. Only applies to public certificates; private certificates (when `certificate_authority_arn` is set) are always exportable and this setting is ignored"
 }
 
 variable "certificate_transparency_logging_preference" {

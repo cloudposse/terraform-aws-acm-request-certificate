@@ -18,7 +18,9 @@ resource "aws_acm_certificate" "default" {
 
   options {
     certificate_transparency_logging_preference = var.certificate_transparency_logging_preference ? "ENABLED" : "DISABLED"
-    export                                      = var.certificate_export ? "ENABLED" : "DISABLED"
+    # The export option only applies to public certificates; private certificates
+    # are always exportable and ACM rejects the option for the PRIVATE type.
+    export = local.public_enabled ? (var.certificate_export ? "ENABLED" : "DISABLED") : null
   }
 
   tags = module.this.tags
